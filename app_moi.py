@@ -6,717 +6,857 @@ st.set_page_config(
     page_title="Kỳ Đạo | Cờ Tướng",
     page_icon="♟",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="collapsed",
 )
-
-st.markdown("""
-<style>
-#MainMenu, header, footer, [data-testid="stToolbar"],
-[data-testid="stHeader"], [data-testid="stSidebar"] {display:none!important}
-.stApp {background:#130c09}
-.block-container {padding:0!important;max-width:100%!important}
-iframe {border:0!important}
-</style>
-""", unsafe_allow_html=True)
 
 HTML = r"""
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-*{box-sizing:border-box}
-:root{--gold:#e7c27b;--gold2:#f8e3b1;--red:#a52e31}
-html,body{margin:0;padding:0;background:#130c09;color:#f8ead0;
-font-family:Georgia,"Times New Roman",serif}
-button,select,input{font:inherit}
-button{cursor:pointer;transition:.18s}
-button:hover{filter:brightness(1.15);transform:translateY(-1px)}
-button:disabled{opacity:.5;cursor:not-allowed}
-#app{min-height:100vh;background:radial-gradient(ellipse at 75% 20%,#573020,#25140e 50%,#100a08)}
-.topline{height:5px;background:linear-gradient(90deg,#651619,#f4d48e,#7e2226)}
-.home{min-height:calc(100vh - 5px);position:relative;display:flex;align-items:center;
-padding:42px 6%;overflow:hidden}
-.home-content{position:relative;z-index:2;width:49%;max-width:570px}
-.brand{display:flex;align-items:center;gap:12px;color:var(--gold);font-size:13px;letter-spacing:4px}
-.brand-icon{border:1px solid #b38a4e;border-radius:50%;width:44px;height:44px;
-display:grid;place-items:center;font-size:23px;flex-shrink:0}
-.eyebrow{font-size:12px;letter-spacing:3px;color:#d5aa65;margin:28px 0 12px}
-h1{font-size:clamp(48px,6vw,82px);line-height:1.04;margin:0;color:#f4d99d;
-font-weight:normal;text-shadow:0 4px 20px #000}
-h1 span{display:block;font-size:.5em;letter-spacing:8px;margin-top:16px}
-.intro{color:#d0bca2;font:15px/1.9 Arial,sans-serif;max-width:430px;margin:25px 0}
-.hero-buttons{display:flex;flex-direction:column;gap:12px;width:min(350px,100%);margin-top:22px}
-.hero-buttons button{width:100%;min-height:58px;padding:14px 20px;font-size:17px;
-font-weight:bold;letter-spacing:1px;border:1px solid #d2ac6b;border-radius:9px;
-box-shadow:0 7px 20px #0007}
-.primary{background:linear-gradient(135deg,#b13b32,#65191c);color:#fff0d2}
-.secondary{background:#211510;color:#f0d29a}
-.home-foot{margin-top:24px;color:#a38a6b;font:11px Arial,sans-serif;letter-spacing:3px}
-.board-showcase{position:absolute;right:5%;top:50%;transform:translateY(-50%);
-width:min(43vw,500px);filter:drop-shadow(0 25px 25px #000b)}
-.board-frame{padding:9px;background:linear-gradient(135deg,#98602e,#e2bb72,#63391d);
-border:2px solid #d5a858;box-shadow:inset 0 0 0 4px #563018}
-canvas{display:block;width:100%;height:auto}
-#decorBoard{background:#d8b578}
-.game{display:none;padding:20px 3% 30px;min-height:100vh}
-.game-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:15px}
-.game-title{font-size:24px;color:var(--gold2)}
-.small-btn{padding:10px 14px;border:1px solid #947044;border-radius:8px;color:#f5dfb2;background:#2c1b14;font-size:13px}
-.game-layout{display:grid;grid-template-columns:minmax(0,650px) minmax(230px,1fr);
-gap:20px;align-items:start;max-width:1200px;margin:auto}
-.play-area{position:relative;width:100%;padding:8px;background:linear-gradient(135deg,#a87339,#e5c580,#68401f);
-border:2px solid #e1b66a;box-shadow:0 18px 40px #0009}
-#board{width:100%;height:auto;background:#d9b87c;touch-action:manipulation}
-.game-side{background:#241713;border:1px solid #73502e;border-radius:12px;padding:17px}
-.game-side h2{font-size:21px;color:var(--gold2);font-weight:normal;margin:0 0 12px}
-.status{background:#160e0c;border:1px solid #503321;border-radius:8px;padding:12px;
-margin-bottom:12px;line-height:1.6;color:#ead6b5;font:14px/1.7 Arial,sans-serif;min-height:48px}
-.side-buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.side-buttons button{padding:11px 5px;border:1px solid #89643a;border-radius:7px;
-background:#3a2419;color:#f4dfb7;font-size:13px}
-.side-buttons .danger{background:#6e2021}
-.side-buttons .wide{grid-column:1/-1}
-.section-title{color:#dcb76e;font-size:11px;letter-spacing:2px;margin:18px 0 8px}
-.tip{color:#c8b59b;font:13px/1.7 Arial,sans-serif}
-.overlay{display:none;position:fixed;z-index:1000;inset:0;background:#080504e8;
-align-items:center;justify-content:center;padding:12px}
-.overlay.show{display:flex}
-.modal{position:relative;width:min(540px,96vw);max-height:92vh;overflow:auto;
-padding:23px;background:linear-gradient(145deg,#352017,#170e0c);
-border:1px solid #c59a55;border-radius:14px;box-shadow:0 20px 80px #000}
-.modal h2{margin:0 0 12px;color:var(--gold2);font-size:25px;font-weight:normal;padding-right:25px}
-.modal p,.modal li{font:13px/1.7 Arial,sans-serif;color:#e1cdb0}
-.modal-buttons{display:grid;grid-template-columns:1fr;gap:10px}
-.modal-buttons button{min-height:48px;padding:11px;border:1px solid #c6a063;
-border-radius:8px;background:#42251a;color:#f7e4bd;font-size:15px}
-.close{position:absolute;right:12px;top:7px;border:0;background:transparent;color:#d9c4a3;font-size:27px}
-.mode-modal{width:min(560px,96vw);padding:19px}
-.mode-modal h2{font-size:24px;margin-bottom:8px}
-#modeIntro{margin:0 0 12px}
-#difficultyList{display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:4px}
-#difficultyList .difficulty-heading,#difficultyList .difficulty-description,
-#difficultyList .back-button{grid-column:1/-1}
-#difficultyList .difficulty-heading{margin:0;color:#e4bd72;letter-spacing:2px}
-#difficultyList .difficulty-description{margin:0 0 2px}
-.difficulty-card{display:grid;grid-template-columns:35px minmax(0,1fr) 10px;
-align-items:center;gap:6px;min-width:0;min-height:82px;margin:0;padding:8px;
-background:linear-gradient(120deg,#382117,#21130f);border:1px solid #76512e;
-border-radius:9px;color:#f5dfb2;cursor:pointer}
-.difficulty-card:hover{border-color:#e4bd72;background:#4b291b}
-.difficulty-icon{width:32px;height:32px;display:grid;place-items:center;
-border:1px solid #b68b4c;border-radius:50%;color:#edca83;font-size:18px}
-.difficulty-card b{color:#f0d092;font-size:12px;letter-spacing:0}
-.difficulty-card p{margin:4px 0 0;color:#cbb49a;font:11px/1.4 Arial,sans-serif}
-.back-button{width:100%;min-height:38px;margin-top:2px;padding:8px}
-.setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px;
-padding:12px 0;border-bottom:1px solid #4b3022;font:13px Arial,sans-serif}
-.setting-row select{background:#160e0c;color:#f5dfb2;border:1px solid #96713d;border-radius:6px;padding:8px}
-.setting-row input[type=range]{width:42%;accent-color:#d6a34f}
-.setting-row input[type=checkbox]{width:18px;height:18px;accent-color:#b38a4e}
-.result{display:none;position:absolute;inset:0;z-index:20;background:#100907ed;
-align-items:center;justify-content:center;text-align:center}
-.result.show{display:flex}
-.result-box{padding:15px}
-.result h2{font-size:clamp(35px,7vw,65px);color:#f6d783;text-shadow:0 5px 20px #000;margin:0 0 14px}
-.result p{font:15px Arial,sans-serif;color:#f4e2c5}
-.result button{margin:5px;padding:12px 15px;border:1px solid #e0bb70;border-radius:8px;background:#772326;color:#fff0ce}
-@media(max-height:720px){
- .mode-modal{max-height:96vh;padding:12px}
- .mode-modal h2{font-size:21px;margin-bottom:5px}
- #difficultyList{gap:6px}
- .difficulty-card{min-height:66px;padding:5px}
- .difficulty-card p{font-size:10px;line-height:1.25}
- .difficulty-icon{width:27px;height:27px;font-size:15px}
+:root {
+  --gold:#e8bd72;
+  --gold2:#ffe4a8;
+  --bg:#151913;
+  --panel:#22271f;
+  --line:#6d4a28;
 }
-@media(max-width:800px){
- .home{padding:28px 6%;min-height:unset;display:flex;flex-direction:column;align-items:stretch}
- .home-content{width:100%;max-width:none}
- .board-showcase{position:relative;right:auto;top:auto;transform:none;width:min(88%,390px);margin:28px auto 0}
- .hero-buttons{width:min(390px,100%)}
- .game-layout{grid-template-columns:minmax(0,1fr)}
- .game-side{order:2}.game{padding:12px 3%}.game-title{font-size:19px}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  color:#f5eddd;
+  background:radial-gradient(ellipse at top,#343b2a,#11140f 75%);
+  font-family:Arial,sans-serif;
 }
-@media(max-width:360px){
- .mode-modal{padding:10px}
- #difficultyList{gap:5px}
- .difficulty-card{grid-template-columns:25px minmax(0,1fr);padding:5px}
- .difficulty-icon{width:24px;height:24px;font-size:13px}
- .difficulty-card>span{display:none}
- .difficulty-card b{font-size:10px}
+button,select,input {font:inherit}
+button {
+  cursor:pointer;
+  color:#f9edda;
+  background:#343b2d;
+  border:1px solid #76603c;
+  border-radius:11px;
+  padding:11px 15px;
+  transition:background .2s,transform .2s,border-color .2s;
+}
+button:hover {
+  background:#4a503a;
+  border-color:var(--gold);
+}
+button:active {transform:scale(.97)}
+button:disabled {opacity:.4;cursor:not-allowed}
+#app {max-width:1100px;margin:auto;padding:16px}
+.brand {
+  text-align:center;
+  font-size:clamp(30px,6vw,53px);
+  font-weight:900;
+  letter-spacing:5px;
+  color:var(--gold2);
+  text-shadow:0 3px 20px #d7a45144;
+}
+.subtitle {
+  text-align:center;color:#c5b69a;
+  margin:8px 0 25px;letter-spacing:2px;
+}
+.panel {
+  background:#20251deF;
+  border:1px solid #685437;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 15px 45px #0005;
+}
+.home {
+  min-height:65vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;
+  background:
+    radial-gradient(ellipse at center,#5b462555,transparent 65%),
+    linear-gradient(135deg,#292e21,#161913);
+}
+.home-mark {
+  font-size:clamp(70px,14vw,130px);
+  color:var(--gold);
+  line-height:1.1;
+  text-shadow:0 0 35px #c59c4d44;
+}
+.home h1 {font-size:clamp(25px,5vw,42px);margin:12px}
+.home p {color:#c5bda9;line-height:1.7;max-width:550px}
+.main-buttons {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;width:min(100%,500px);margin-top:20px;
+}
+.primary {
+  background:linear-gradient(135deg,#b88a45,#80602f);
+  color:#fff7e6;border:1px solid #f0cd88;
+  font-weight:bold;padding:15px 12px;
+}
+.primary:hover {background:linear-gradient(135deg,#d0a45d,#98743d)}
+.small-note {font-size:12px;color:#a9a18f;margin-top:20px}
+.hidden {display:none!important}
+#gameView {max-width:900px;margin:auto}
+.topbar {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;flex-wrap:wrap;margin-bottom:12px;
+}
+.topbar strong {color:var(--gold2);font-size:20px}
+.status {
+  text-align:center;padding:11px;border-radius:12px;
+  background:#171b14;border:1px solid #49442f;
+  margin:10px 0;color:#ead6a9;
+  min-height:43px;
+}
+.board-wrap {width:min(100%,650px);margin:0 auto;position:relative}
+.board {
+  position:relative;width:100%;aspect-ratio:8/9;
+  overflow:hidden;border:5px solid #664222;border-radius:5px;
+  background-color:#e5c58b;
+  background-image:
+    linear-gradient(#654322 1.2px,transparent 1.2px),
+    linear-gradient(90deg,#654322 1.2px,transparent 1.2px);
+  background-size:12.5% 11.111111%;
+  background-position:6.25% 5.555555%;
+  box-shadow:0 12px 28px #0008,inset 0 0 0 2px #b99055;
+}
+.river {
+  position:absolute;left:6.25%;width:87.5%;
+  top:50%;transform:translateY(-50%);
+  height:11.111%;display:flex;align-items:center;
+  justify-content:space-around;color:#704723;
+  font-size:clamp(12px,2.5vw,22px);letter-spacing:5px;
+  background:#e5c58b;pointer-events:none;
+}
+.palace {
+  position:absolute;left:31.25%;width:37.5%;
+  height:22.222%;pointer-events:none;opacity:.9;
+}
+.palace.top {top:5.555%}
+.palace.bottom {bottom:5.555%}
+.palace:before,.palace:after {
+  content:"";position:absolute;left:0;top:0;
+  width:100%;height:100%;border-top:1.2px solid #654322;
+  transform:rotate(26.565deg);transform-origin:center;
+}
+.palace:after {transform:rotate(-26.565deg)}
+.piece {
+  position:absolute;width:10.6%;aspect-ratio:1;
+  border-radius:50%;display:flex;align-items:center;
+  justify-content:center;z-index:3;
+  transform:translate(-50%,-50%);
+  transition:left .4s ease-in-out,top .4s ease-in-out,
+    box-shadow .18s,filter .18s;
+  font-family:"KaiTi","STKaiti",serif;
+  font-weight:900;font-size:clamp(17px,4vw,29px);
+  background:radial-gradient(circle at 35% 28%,#fff3d2,#dfc18a 60%,#a77a3f);
+  border:2px solid #76502b;color:#29251e;
+  box-shadow:0 3px 4px #0005,inset 0 0 0 2px #f7e0ae;
+  padding:0;line-height:1;
+}
+.piece.black {
+  color:#20221c;background:radial-gradient(circle at 35% 28%,#fff,#d5d1c6 65%,#99958a);
+  border-color:#55564d;
+  box-shadow:0 3px 4px #0005,inset 0 0 0 2px #f8f5e9;
+}
+.piece.selected {
+  box-shadow:0 0 0 4px #f7d36a,0 0 20px #f7d36a;
+  z-index:5;
+}
+.piece.last {
+  box-shadow:0 0 0 3px #75a96b,0 3px 4px #0005;
+}
+.piece.hint {
+  box-shadow:0 0 0 4px #6cb8ee,0 0 20px #6cb8ee;
+}
+.piece:disabled {opacity:1;cursor:default}
+.controls {
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;margin-top:14px;
+}
+.controls button {padding:11px 5px;font-size:13px}
+.section-title {color:var(--gold2);margin:0 0 10px}
+.extras {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;margin-top:14px;
+}
+.extras .panel {padding:15px}
+.extras p {color:#c6c0b1;font-size:14px;line-height:1.6}
+.overlay {
+  position:fixed;inset:0;z-index:20;
+  display:flex;align-items:center;justify-content:center;
+  padding:14px;background:#080a08d9;
+  backdrop-filter:blur(7px);
+}
+.modal {
+  width:min(100%,510px);max-height:92vh;overflow:auto;
+  padding:24px;background:#22271f;border:1px solid #8c7044;
+  border-radius:20px;box-shadow:0 20px 80px #0009;
+  position:relative;
+}
+.modal h2 {color:var(--gold2);margin:0 30px 8px 0}
+.modal p {color:#c6c0b1;line-height:1.6}
+.close {
+  position:absolute;right:12px;top:12px;
+  padding:5px 11px;font-size:22px;border:0;
+  background:transparent;
+}
+.modal-buttons {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;margin-top:18px;
+}
+.difficulties {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;margin-top:15px;
+}
+.difficulty-card {
+  min-height:86px;text-align:left;padding:14px;
+  background:#2b3025;
+}
+.difficulty-card b {display:block;color:var(--gold2);margin-bottom:7px}
+.difficulty-card span {font-size:12px;color:#c0b7a4}
+.field {margin:16px 0}
+.field label {display:block;margin-bottom:8px;color:#e9d9b9}
+.field input[type=range] {width:100%;accent-color:#d5ad65}
+.field select {width:100%;padding:10px;background:#303528;color:white;border-radius:8px}
+.tutorial li {margin:9px 0;color:#ded5c2;line-height:1.6}
+#resultOverlay {z-index:40;background:#090b09eF}
+.result-box {
+  text-align:center;width:min(100%,650px);
+  padding:35px 18px;border:1px solid #b69350;
+  border-radius:22px;background:linear-gradient(140deg,#353a29,#151912);
+  box-shadow:0 0 70px #000b;
+}
+.result-title {
+  font-size:clamp(38px,9vw,76px);font-weight:1000;
+  color:#ffdf92;text-shadow:0 0 24px #e6b45177;
+  animation:appear .7s ease both;
+}
+@keyframes appear {
+  from {opacity:0;transform:scale(.7)}
+  to {opacity:1;transform:scale(1)}
+}
+.thinking-dots:after {content:"";animation:dots 1.2s infinite}
+@keyframes dots {
+  0%{content:""} 25%{content:"."}
+  50%{content:".."} 75%{content:"..."}
+}
+@media(max-width:560px) {
+  #app {padding:8px}
+  .panel {padding:12px}
+  .board {border-width:3px}
+  .piece {width:10.7%;border-width:1.5px}
+  .controls {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .extras {grid-template-columns:1fr}
+  .modal {padding:20px 15px}
+  .main-buttons {grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 <div id="app">
-<div class="topline"></div>
-<section class="home" id="home">
- <div class="home-content">
-  <div class="brand"><div class="brand-icon">帥</div><span>KỲ ĐẠO · XIANGQI</span></div>
-  <div class="eyebrow" data-i18n="eyebrow">NGHỆ THUẬT CỦA CHIẾN THUẬT</div>
-  <h1>象棋<span data-i18n="title">CỜ TƯỚNG</span></h1>
-  <p class="intro" data-i18n="intro">Rèn luyện tư duy, tính toán từng nước đi và bảo vệ Tướng của bạn.</p>
-  <div class="hero-buttons">
-   <button class="primary" onclick="openModes()" data-i18n="start">♟ BẮT ĐẦU</button>
-   <button class="secondary" onclick="openModal('helpModal')" data-i18n="help">📖 HƯỚNG DẪN</button>
-   <button class="secondary" onclick="openModal('settingsModal')" data-i18n="settings">⚙ CÀI ĐẶT</button>
-  </div>
-  <div class="home-foot">STRATEGY · PATIENCE · WISDOM</div>
- </div>
- <div class="board-showcase"><div class="board-frame"><canvas id="decorBoard" width="540" height="600"></canvas></div></div>
-</section>
+  <div class="brand">KỲ ĐẠO</div>
+  <div class="subtitle" data-t="subtitle">CỜ TƯỚNG · KHAI CUỘC CỦA RIÊNG BẠN</div>
 
-<section class="game" id="game">
- <div class="game-top">
-  <div class="brand"><div class="brand-icon">帥</div><span>KỲ ĐẠO</span></div>
-  <div class="game-title" data-i18n="gameTitle">BÀN CỜ TƯỚNG</div>
-  <button class="small-btn" onclick="openModal('settingsModal')" data-i18n="settings">⚙ CÀI ĐẶT</button>
- </div>
- <div class="game-layout">
-  <div class="play-area">
-   <canvas id="board" width="540" height="600"></canvas>
-   <div class="result" id="result"><div class="result-box">
-    <h2 id="resultTitle">CHIẾN THẮNG!</h2><p id="resultText"></p>
-    <button onclick="newGame()" data-i18n="again">Chơi lại</button>
-    <button onclick="goHome()" data-i18n="home">Về sảnh</button>
-   </div></div>
-  </div>
-  <aside class="game-side">
-   <h2 data-i18n="matchInfo">Thông tin ván đấu</h2>
-   <div class="status" id="status">Đến lượt Đỏ.</div>
-   <div class="side-buttons">
-    <button onclick="hintMove()" data-i18n="hint">💡 Gợi ý</button>
-    <button onclick="undoMove()" data-i18n="undo">↶ Đi lại</button>
-    <button onclick="newGame()" data-i18n="restart">⟳ Ván mới</button>
-    <button class="danger" onclick="resign()" data-i18n="resign">Đầu hàng</button>
-    <button class="wide" onclick="goHome()" data-i18n="home">⌂ Về sảnh chính</button>
-   </div>
-   <div class="section-title" data-i18n="tools">CÔNG CỤ</div>
-   <p class="tip" data-i18n="toolTip">Gợi ý đánh dấu nước tham khảo. Đi lại hoàn tác nước gần nhất.</p>
-   <div class="section-title" data-i18n="quickRules">NHẮC NHANH LUẬT CHƠI</div>
-   <p class="tip" data-i18n="quickTip">Mục tiêu là chiếu bí Tướng đối phương. Pháo cần một quân làm ngòi khi ăn quân.</p>
-  </aside>
- </div>
-</section>
+  <section id="homeView" class="panel home">
+    <div class="home-mark">帥　將</div>
+    <h1 data-t="welcome">Chào mừng đến Kỳ Đạo</h1>
+    <p data-t="intro">Một bàn cờ, nhiều chiến thuật. Luyện tư duy, tìm nước đi và thử sức với máy.</p>
+    <div class="main-buttons">
+      <button class="primary" onclick="openModes()" data-t="play">♟ BẮT ĐẦU CHƠI</button>
+      <button onclick="openModal('tutorialModal')" data-t="learn">📖 HƯỚNG DẪN</button>
+      <button onclick="openSettings()" data-t="settings">⚙ CÀI ĐẶT</button>
+      <button onclick="openModal('aboutModal')" data-t="about">ⓘ GIỚI THIỆU</button>
+    </div>
+    <div class="small-note">KỲ ĐẠO · XIANGQI</div>
+  </section>
+
+  <section id="gameView" class="hidden">
+    <div class="topbar">
+      <button onclick="openSettings()">⚙ <span data-t="settingsShort">Cài đặt</span></button>
+      <strong>KỲ ĐẠO</strong>
+      <button onclick="goHome()" data-t="home">⌂ Sảnh chính</button>
+    </div>
+    <div class="status" id="status" data-t="redTurn">Đến lượt Đỏ</div>
+    <div class="board-wrap">
+      <div class="board" id="board">
+        <div class="palace top"></div>
+        <div class="palace bottom"></div>
+        <div class="river" data-t="river">楚 河　　漢 界</div>
+      </div>
+    </div>
+    <div class="controls">
+      <button onclick="showHint()" data-t="hint">💡 Gợi ý</button>
+      <button onclick="undoMove()" data-t="undo">↶ Hoàn tác</button>
+      <button onclick="newGame()" data-t="newGame">⟳ Ván mới</button>
+      <button onclick="resign()" data-t="resign">⚑ Đầu hàng</button>
+    </div>
+    <div class="extras">
+      <div class="panel">
+        <h3 class="section-title" data-t="tools">Công cụ</h3>
+        <p data-t="toolText">Chọn quân cờ của bạn, sau đó chọn giao điểm muốn đi. Nước đi hợp lệ sẽ được kiểm tra tự động.</p>
+        <button onclick="openModal('tutorialModal')" data-t="rules">📖 Xem luật chơi</button>
+      </div>
+      <div class="panel">
+        <h3 class="section-title" data-t="gameInfo">Thông tin ván đấu</h3>
+        <p id="modeInfo">Chế độ: Đấu với máy</p>
+        <p><span data-t="elapsed">Thời gian</span>: <b id="clock">00:00</b></p>
+        <p id="moveInfo">Số nước đi: 0</p>
+      </div>
+    </div>
+  </section>
 </div>
 
-<div class="overlay" id="modeModal">
- <div class="modal mode-modal">
-  <button class="close" onclick="closeModal('modeModal')">×</button>
-  <h2 data-i18n="chooseMode">Chọn chế độ chơi</h2>
-  <p id="modeIntro" data-i18n="modeIntro">Chọn cách chơi phù hợp với bạn.</p>
-  <div class="modal-buttons" id="mainModes">
-   <button onclick="showDifficulties()" data-i18n="vsBot">♟ Đấu với máy</button>
-   <button onclick="startGame('human',1)" data-i18n="vsHuman">♟ Đấu hai người</button>
+<div class="overlay hidden" id="modeModal">
+  <div class="modal">
+    <button class="close" onclick="closeModal('modeModal')">×</button>
+    <h2 data-t="chooseMode">Chọn chế độ chơi</h2>
+    <p id="modeIntro" data-t="modeIntro">Chọn cách chơi phù hợp với bạn.</p>
+    <div class="modal-buttons" id="modeButtons">
+      <button class="primary" onclick="showDifficulties()" data-t="vsBot">♟ Đấu với máy</button>
+      <button onclick="startGame('human',1)" data-t="vsHuman">♟ Đấu hai người</button>
+    </div>
+    <div class="difficulties hidden" id="difficultyList">
+      <button class="difficulty-card" onclick="startGame('bot',1)"><b data-t="easy">🌱 Dễ</b><span data-t="easyDesc">Làm quen chiến thuật</span></button>
+      <button class="difficulty-card" onclick="startGame('bot',2)"><b data-t="medium">⚔️ Trung bình</b><span data-t="mediumDesc">Biết bảo vệ quân</span></button>
+      <button class="difficulty-card" onclick="startGame('bot',3)"><b data-t="hard">🔥 Khó</b><span data-t="hardDesc">Tính toán sâu hơn</span></button>
+      <button class="difficulty-card" onclick="startGame('bot',4)"><b data-t="expert">👑 Siêu khó</b><span data-t="expertDesc">Đối thủ mạnh nhất</span></button>
+      <button style="grid-column:1/-1" onclick="backToModes()" data-t="back">← QUAY LẠI</button>
+    </div>
   </div>
-  <div id="difficultyList">
-   <p class="difficulty-heading" data-i18n="chooseLevelTitle">CHỌN ĐỐI THỦ</p>
-   <p class="difficulty-description" data-i18n="chooseLevel">Chọn đối thủ phù hợp với bạn.</p>
-   <div class="difficulty-card" onclick="startGame('bot',1)">
-    <div class="difficulty-icon">♟</div><div><b data-i18n="easy">DỄ</b><p data-i18n="easyDesc">Phù hợp cho người mới.</p></div><span>›</span>
-   </div>
-   <div class="difficulty-card" onclick="startGame('bot',2)">
-    <div class="difficulty-icon">⚔</div><div><b data-i18n="medium">TRUNG BÌNH</b><p data-i18n="mediumDesc">Máy ưu tiên ăn quân.</p></div><span>›</span>
-   </div>
-   <div class="difficulty-card" onclick="startGame('bot',3)">
-    <div class="difficulty-icon">♜</div><div><b data-i18n="hard">KHÓ</b><p data-i18n="hardDesc">Thử thách chiến thuật.</p></div><span>›</span>
-   </div>
-   <div class="difficulty-card" onclick="startGame('bot',4)">
-    <div class="difficulty-icon">冠</div><div><b data-i18n="expert">SIÊU KHÓ</b><p data-i18n="expertDesc">Cấp độ thử thách cao nhất.</p></div><span>›</span>
-   </div>
-   <button class="small-btn back-button" onclick="backToModes()" data-i18n="back">← QUAY LẠI</button>
-  </div>
- </div>
 </div>
 
-<div class="overlay" id="helpModal">
- <div class="modal">
-  <button class="close" onclick="closeModal('helpModal')">×</button>
-  <h2 data-i18n="guideTitle">Hướng dẫn chơi cờ tướng</h2>
-  <div id="guideContent"></div>
-  <div class="modal-buttons"><button onclick="closeModal('helpModal')" data-i18n="gotIt">Đã hiểu</button></div>
- </div>
+<div class="overlay hidden" id="settingsModal">
+  <div class="modal">
+    <button class="close" onclick="closeModal('settingsModal')">×</button>
+    <h2 data-t="settingsTitle">Cài đặt Kỳ Đạo</h2>
+    <div class="field">
+      <label data-t="language">Ngôn ngữ</label>
+      <select id="language" onchange="setLanguage(this.value)">
+        <option value="vi">Tiếng Việt</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+    <div class="field">
+      <label data-t="sound">Âm thanh hiệu ứng</label>
+      <input id="soundToggle" type="checkbox" checked onchange="soundOn=this.checked">
+    </div>
+    <div class="field">
+      <label data-t="soundVolume">Âm lượng hiệu ứng</label>
+      <input id="soundVolume" type="range" min="0" max="100" value="45" oninput="soundVol=this.value/100">
+    </div>
+    <div class="field">
+      <label data-t="music">Nhạc nền</label>
+      <input id="musicToggle" type="checkbox" onchange="toggleMusic(this.checked)">
+    </div>
+    <div class="field">
+      <label data-t="musicVolume">Âm lượng nhạc nền</label>
+      <input id="musicVolume" type="range" min="0" max="100" value="12" oninput="musicVol=this.value/100;updateMusicVolume()">
+    </div>
+    <button class="primary" style="width:100%" onclick="closeModal('settingsModal')" data-t="done">XONG</button>
+  </div>
 </div>
 
-<div class="overlay" id="settingsModal">
- <div class="modal">
-  <button class="close" onclick="closeModal('settingsModal')">×</button>
-  <h2 data-i18n="settingsTitle">Cài đặt trò chơi</h2>
-  <div class="setting-row"><span data-i18n="language">Ngôn ngữ</span>
-   <select id="language" onchange="changeLanguage(this.value)"><option value="vi">Tiếng Việt</option><option value="en">English</option></select>
+<div class="overlay hidden" id="tutorialModal">
+  <div class="modal">
+    <button class="close" onclick="closeModal('tutorialModal')">×</button>
+    <h2 data-t="tutorialTitle">Hướng dẫn chơi cờ tướng</h2>
+    <ul class="tutorial" id="tutorialList">
+      <li><b>Tướng:</b> đi một ô ngang hoặc dọc trong cung.</li>
+      <li><b>Sĩ:</b> đi chéo một ô trong cung.</li>
+      <li><b>Tượng:</b> đi chéo hai ô, không qua sông và không bị cản mắt.</li>
+      <li><b>Mã:</b> đi theo hình chữ L, có thể bị cản chân.</li>
+      <li><b>Xe:</b> đi ngang hoặc dọc, không bị quân cản.</li>
+      <li><b>Pháo:</b> đi như xe; khi ăn phải nhảy qua đúng một quân.</li>
+      <li><b>Tốt:</b> tiến một ô; qua sông có thể đi ngang, không đi lùi.</li>
+    </ul>
+    <p data-t="tutorialTip">Mục tiêu là chiếu bí tướng đối phương. Không được đi nước khiến tướng của mình bị chiếu.</p>
+    <button class="primary" style="width:100%" onclick="closeModal('tutorialModal')" data-t="gotIt">ĐÃ HIỂU</button>
   </div>
-  <div class="setting-row"><span data-i18n="soundEffects">Hiệu ứng âm thanh</span><input id="soundToggle" type="checkbox" checked onchange="settings.sound=this.checked"></div>
-  <div class="setting-row"><span data-i18n="soundVolume">Âm lượng hiệu ứng</span><input id="soundVolume" type="range" min="0" max="100" value="55" oninput="settings.volume=this.value/100"></div>
-  <div class="setting-row"><span data-i18n="music">Nhạc nền</span><input id="musicToggle" type="checkbox" onchange="toggleMusic(this.checked)"></div>
-  <div class="setting-row"><span data-i18n="musicVolume">Âm lượng nhạc nền</span><input id="musicVolume" type="range" min="0" max="100" value="18" oninput="settings.musicVolume=this.value/100;updateMusicVolume()"></div>
-  <p class="tip" data-i18n="musicNote">Bật nhạc nền để nghe giai điệu trong khi chơi.</p>
-  <div class="modal-buttons"><button onclick="closeModal('settingsModal')" data-i18n="save">Hoàn tất</button></div>
- </div>
+</div>
+
+<div class="overlay hidden" id="aboutModal">
+  <div class="modal">
+    <button class="close" onclick="closeModal('aboutModal')">×</button>
+    <h2 data-t="aboutTitle">Kỳ Đạo</h2>
+    <p data-t="aboutText">Trò chơi cờ tướng chạy trực tiếp trên trình duyệt, có đấu hai người, đấu máy và các công cụ hỗ trợ luyện tập.</p>
+    <button onclick="closeModal('aboutModal')" data-t="gotIt">ĐÃ HIỂU</button>
+  </div>
+</div>
+
+<div class="overlay hidden" id="resultOverlay">
+  <div class="result-box">
+    <div class="result-title" id="resultTitle">CHIẾN THẮNG</div>
+    <p id="resultText"></p>
+    <div class="modal-buttons">
+      <button class="primary" onclick="newGame()" data-t="playAgain">Chơi lại</button>
+      <button onclick="goHome()" data-t="home">Sảnh chính</button>
+    </div>
+  </div>
 </div>
 
 <script>
-const $=id=>document.getElementById(id);
-const T={
+const $ = id => document.getElementById(id);
+
+const T = {
 vi:{
-eyebrow:"NGHỆ THUẬT CỦA CHIẾN THUẬT",title:"CỜ TƯỚNG",
-intro:"Rèn luyện tư duy, tính toán từng nước đi và bảo vệ Tướng của bạn.",
-start:"♟  BẮT ĐẦU",help:"📖  HƯỚNG DẪN",settings:"⚙  CÀI ĐẶT",
-gameTitle:"BÀN CỜ TƯỚNG",again:"Chơi lại",home:"⌂ Về sảnh chính",matchInfo:"Thông tin ván đấu",
-hint:"💡 Gợi ý",undo:"↶ Đi lại",restart:"⟳ Ván mới",resign:"Đầu hàng",tools:"CÔNG CỤ",
-toolTip:"Gợi ý đánh dấu một nước tham khảo. Đi lại hoàn tác nước gần nhất. Ván mới bắt đầu lại.",
-quickRules:"NHẮC NHANH LUẬT CHƠI",quickTip:"Mục tiêu là chiếu bí Tướng đối phương. Không được để Tướng mình bị chiếu. Pháo cần một quân làm ngòi khi ăn.",
-chooseMode:"Chọn chế độ chơi",modeIntro:"Chọn cách chơi phù hợp với bạn.",vsBot:"♟ Đấu với máy",vsHuman:"♟ Đấu hai người",
-chooseLevelTitle:"CHỌN ĐỐI THỦ",chooseLevel:"Chọn một trong bốn cấp độ dưới đây.",
-easy:"DỄ",medium:"TRUNG BÌNH",hard:"KHÓ",expert:"SIÊU KHÓ",
-easyDesc:"Phù hợp cho người mới tập chơi.",mediumDesc:"Máy ưu tiên ăn và bảo vệ quân.",
-hardDesc:"Máy tính toán trước các nước đi.",expertDesc:"Máy tìm kiếm nhiều nước đi hơn.",back:"← QUAY LẠI",
-guideTitle:"Hướng dẫn chơi cờ tướng",gotIt:"Đã hiểu",settingsTitle:"Cài đặt trò chơi",
-language:"Ngôn ngữ",soundEffects:"Hiệu ứng âm thanh",soundVolume:"Âm lượng hiệu ứng",music:"Nhạc nền",
-musicVolume:"Âm lượng nhạc nền",musicNote:"Bật nhạc nền để nghe giai điệu trong khi chơi.",
-save:"Hoàn tất",redTurn:"Đến lượt Đỏ.",blackTurn:"Đến lượt Đen.",selectPiece:"Chọn một quân cờ.",
-botThinking:"Máy đang suy nghĩ…",check:"Chiếu Tướng!",redWins:"ĐỎ CHIẾN THẮNG!",blackWins:"ĐEN CHIẾN THẮNG!",
-guide:`<p><b>1. Mục tiêu</b><br>Chiếu bí Tướng đối phương.</p>
-<p><b>2. Cách đi quân</b></p><ul>
-<li><b>Tướng:</b> đi ngang hoặc dọc một ô trong cung 3×3.</li>
-<li><b>Sĩ:</b> đi chéo một ô trong cung Tướng.</li>
-<li><b>Tượng:</b> đi chéo hai ô, không qua sông và không bị cản mắt.</li>
-<li><b>Xe:</b> đi ngang hoặc dọc qua các ô trống.</li>
-<li><b>Pháo:</b> đi như Xe; khi ăn phải nhảy qua đúng một quân.</li>
-<li><b>Mã:</b> đi chữ L; chân Mã không được bị cản.</li>
-<li><b>Tốt:</b> đi thẳng; qua sông được đi ngang, không đi lùi.</li></ul>
-<p><b>3. Thao tác</b><br>Nhấp quân của mình rồi nhấp ô muốn đi.</p>
-<p><b>4. Công cụ</b><br>Gợi ý đánh dấu nước tham khảo; Đi lại hoàn tác nước trước; Đầu hàng kết thúc ván.</p>`
-},
+ subtitle:"CỜ TƯỚNG · KHAI CUỘC CỦA RIÊNG BẠN",
+ welcome:"Chào mừng đến Kỳ Đạo",
+ intro:"Một bàn cờ, nhiều chiến thuật. Luyện tư duy, tìm nước đi và thử sức với máy.",
+ play:"♟ BẮT ĐẦU CHƠI",learn:"📖 HƯỚNG DẪN",settings:"⚙ CÀI ĐẶT",
+ about:"ⓘ GIỚI THIỆU",settingsShort:"Cài đặt",home:"⌂ Sảnh chính",
+ redTurn:"Đến lượt Đỏ",blackTurn:"Đến lượt Đen",
+ chooseMode:"Chọn chế độ chơi",modeIntro:"Chọn cách chơi phù hợp với bạn.",
+ vsBot:"♟ Đấu với máy",vsHuman:"♟ Đấu hai người",
+ easy:"🌱 Dễ",medium:"⚔️ Trung bình",hard:"🔥 Khó",expert:"👑 Siêu khó",
+ easyDesc:"Làm quen chiến thuật",mediumDesc:"Biết bảo vệ quân",
+ hardDesc:"Tính toán sâu hơn",expertDesc:"Đối thủ mạnh nhất",
+ back:"← QUAY LẠI",settingsTitle:"Cài đặt Kỳ Đạo",
+ language:"Ngôn ngữ",sound:"Âm thanh hiệu ứng",
+ soundVolume:"Âm lượng hiệu ứng",music:"Nhạc nền",
+ musicVolume:"Âm lượng nhạc nền",done:"XONG",
+ tutorialTitle:"Hướng dẫn chơi cờ tướng",
+ tutorialTip:"Mục tiêu là chiếu bí tướng đối phương. Không được đi nước khiến tướng của mình bị chiếu.",
+ gotIt:"ĐÃ HIỂU",aboutTitle:"Kỳ Đạo",
+ aboutText:"Trò chơi cờ tướng chạy trực tiếp trên trình duyệt, có đấu hai người, đấu máy và các công cụ hỗ trợ luyện tập.",
+ hint:"💡 Gợi ý",undo:"↶ Hoàn tác",newGame:"⟳ Ván mới",
+ resign:"⚑ Đầu hàng",tools:"Công cụ",
+ toolText:"Chọn quân cờ của bạn, sau đó chọn giao điểm muốn đi. Nước đi hợp lệ sẽ được kiểm tra tự động.",
+ rules:"📖 Xem luật chơi",gameInfo:"Thông tin ván đấu",
+ elapsed:"Thời gian",river:"楚 河　　漢 界",
+ playAgain:"Chơi lại",botThinking:"Máy đang suy nghĩ",
+ yourTurn:"Đến lượt bạn",choosePiece:"Hãy chọn quân của bạn.",
+ invalid:"Nước đi không hợp lệ.",check:"CHIẾU TƯỚNG!",
+ checkmate:"Chiếu bí!",stalemate:"Hết nước đi hợp lệ!",
+ redWins:"ĐỎ CHIẾN THẮNG",blackWins:"ĐEN CHIẾN THẮNG",
+ draw:"VÁN ĐẤU KẾT THÚC",resignAsk:"Bạn có chắc muốn đầu hàng?",
+ noHint:"Chưa tìm được gợi ý.",hintText:"Nước gợi ý đã được đánh dấu.",
+ noUndo:"Không có nước đi để hoàn tác.",modeBot:"Đấu với máy",
+ modeHuman:"Đấu hai người",moveCount:"Số nước đi",
+ tutorialItems:[
+ "<b>Tướng:</b> đi một ô ngang hoặc dọc trong cung.",
+ "<b>Sĩ:</b> đi chéo một ô trong cung.",
+ "<b>Tượng:</b> đi chéo hai ô, không qua sông và không bị cản mắt.",
+ "<b>Mã:</b> đi theo hình chữ L, có thể bị cản chân.",
+ "<b>Xe:</b> đi ngang hoặc dọc, không bị quân cản.",
+ "<b>Pháo:</b> đi như xe; khi ăn phải nhảy qua đúng một quân.",
+ "<b>Tốt:</b> tiến một ô; qua sông có thể đi ngang, không đi lùi."
+]},
 en:{
-eyebrow:"THE ART OF STRATEGY",title:"XIANGQI",
-intro:"Train your mind, plan each move, and protect your General.",
-start:"♟  PLAY",help:"📖  HOW TO PLAY",settings:"⚙  SETTINGS",gameTitle:"XIANGQI BOARD",
-again:"Play again",home:"⌂ Main menu",matchInfo:"Game information",hint:"💡 Hint",undo:"↶ Undo",
-restart:"⟳ New game",resign:"Resign",tools:"TOOLS",toolTip:"Hint marks a suggested move. Undo reverses the last move.",
-quickRules:"QUICK RULES",quickTip:"Checkmate the enemy General. A Cannon needs one screen to capture.",
-chooseMode:"Choose a game mode",modeIntro:"Choose how you want to play.",vsBot:"♟ Play against computer",
-vsHuman:"♟ Two players",chooseLevelTitle:"CHOOSE YOUR OPPONENT",chooseLevel:"Choose one of four levels.",
-easy:"EASY",medium:"MEDIUM",hard:"HARD",expert:"VERY HARD",easyDesc:"For new players learning the rules.",
-mediumDesc:"The computer captures and protects pieces.",hardDesc:"The computer looks ahead at possible moves.",
-expertDesc:"The computer searches more possible moves.",back:"← BACK",guideTitle:"How to play Xiangqi",gotIt:"Got it",
-settingsTitle:"Game settings",language:"Language",soundEffects:"Sound effects",soundVolume:"Effects volume",
-music:"Background music",musicVolume:"Music volume",musicNote:"Enable background music to hear the melody.",
-save:"Done",redTurn:"Red to move.",blackTurn:"Black to move.",selectPiece:"Select a piece.",
-botThinking:"Computer is thinking…",check:"Check!",redWins:"RED WINS!",blackWins:"BLACK WINS!",
-guide:`<p><b>1. Goal</b><br>Checkmate the enemy General.</p><p><b>2. Pieces</b></p><ul>
-<li><b>General:</b> one orthogonal square inside the palace.</li><li><b>Advisor:</b> one diagonal square inside the palace.</li>
-<li><b>Elephant:</b> two diagonal squares; cannot cross the river or jump a blocked eye.</li>
-<li><b>Chariot:</b> any number of empty squares horizontally or vertically.</li>
-<li><b>Cannon:</b> moves like a Chariot, but needs one screen to capture.</li>
-<li><b>Horse:</b> moves in an L shape; its leg must be clear.</li>
-<li><b>Soldier:</b> moves forward; after crossing the river it may move sideways, never backward.</li></ul>
-<p><b>3. Controls</b><br>Click your piece, then the destination square.</p>`
-}
+ subtitle:"XIANGQI · YOUR NEXT MOVE STARTS HERE",
+ welcome:"Welcome to Ky Dao",
+ intro:"One board, countless strategies. Train your mind and challenge the computer.",
+ play:"♟ START GAME",learn:"📖 HOW TO PLAY",settings:"⚙ SETTINGS",
+ about:"ⓘ ABOUT",settingsShort:"Settings",home:"⌂ Main menu",
+ redTurn:"Red to move",blackTurn:"Black to move",
+ chooseMode:"Choose game mode",modeIntro:"Choose how you want to play.",
+ vsBot:"♟ Play computer",vsHuman:"♟ Two players",
+ easy:"🌱 Easy",medium:"⚔️ Medium",hard:"🔥 Hard",expert:"👑 Expert",
+ easyDesc:"Learn the basics",mediumDesc:"Defends its pieces",
+ hardDesc:"Deeper calculation",expertDesc:"Strongest opponent",
+ back:"← BACK",settingsTitle:"Ky Dao settings",
+ language:"Language",sound:"Sound effects",
+ soundVolume:"Sound volume",music:"Background music",
+ musicVolume:"Music volume",done:"DONE",
+ tutorialTitle:"How to play Xiangqi",
+ tutorialTip:"The goal is to checkmate the enemy general. Never make a move that leaves your own general in check.",
+ gotIt:"GOT IT",aboutTitle:"Ky Dao",
+ aboutText:"A browser-based Xiangqi game with two-player mode, computer opponents and training tools.",
+ hint:"💡 Hint",undo:"↶ Undo",newGame:"⟳ New game",
+ resign:"⚑ Resign",tools:"Tools",
+ toolText:"Select one of your pieces, then select its destination. Legal moves are checked automatically.",
+ rules:"📖 Rules",gameInfo:"Game information",
+ elapsed:"Time",river:"楚 河　　漢 界",
+ playAgain:"Play again",botThinking:"Computer thinking",
+ yourTurn:"Your turn",choosePiece:"Select one of your pieces.",
+ invalid:"Illegal move.",check:"CHECK!",
+ checkmate:"Checkmate!",stalemate:"No legal moves!",
+ redWins:"RED WINS",blackWins:"BLACK WINS",
+ draw:"GAME OVER",resignAsk:"Are you sure you want to resign?",
+ noHint:"No hint available.",hintText:"Suggested move highlighted.",
+ noUndo:"No move to undo.",modeBot:"Play computer",
+ modeHuman:"Two players",moveCount:"Moves",
+ tutorialItems:[
+ "<b>General:</b> one step orthogonally inside the palace.",
+ "<b>Advisor:</b> one diagonal step inside the palace.",
+ "<b>Elephant:</b> two diagonal steps, cannot cross the river or jump a blocked eye.",
+ "<b>Horse:</b> moves in an L shape and can be blocked at its leg.",
+ "<b>Chariot:</b> moves orthogonally without jumping pieces.",
+ "<b>Cannon:</b> moves like a chariot; captures by jumping exactly one piece.",
+ "<b>Soldier:</b> moves forward; after crossing the river it may also move sideways."
+]}
 };
-let lang="vi";
-let settings={sound:true,volume:.55,musicVolume:.18};
-let audioCtx=null,musicTimer=null,musicOn=false,musicOsc=[];
+
+let lang="vi",soundOn=true,soundVol=.45,musicVol=.12;
+let musicOn=false,audioCtx=null,musicTimer=null,musicOsc=null;
+let mode="bot",level=2,turn="r",board=[],selected=null;
+let history=[],lastMove=null,hintMove=null,gameOver=false;
+let busy=false,startedAt=0,clockTimer=null,moveCount=0;
+let humanSide="r";
+
 function tr(k){return T[lang][k]||T.vi[k]||k}
-function changeLanguage(v){
- lang=v;
- document.querySelectorAll("[data-i18n]").forEach(el=>{
-  const k=el.getAttribute("data-i18n");if(T[lang][k])el.textContent=T[lang][k];
+function applyTranslations(){
+ document.querySelectorAll("[data-t]").forEach(el=>{
+  const k=el.getAttribute("data-t"); if(T[lang][k]) el.innerHTML=T[lang][k];
  });
- $("guideContent").innerHTML=tr("guide");
- updateStatus();drawBoardCanvas($("decorBoard"),true);drawBoard();
+ $("tutorialList").innerHTML=T[lang].tutorialItems.map(x=>"<li>"+x+"</li>").join("");
+ if(!busy&&!gameOver)updateStatus();
 }
-function openModal(id){$(id).classList.add("show")}
-function closeModal(id){$(id).classList.remove("show")}
+function setLanguage(v){lang=v;applyTranslations()}
+function openModal(id){$(id).classList.remove("hidden")}
+function closeModal(id){$(id).classList.add("hidden")}
+function openSettings(){$("language").value=lang;openModal("settingsModal")}
 function openModes(){
- $("mainModes").style.display="grid";
- $("modeIntro").style.display="block";
- $("difficultyList").style.display="none";
+ $("modeIntro").classList.remove("hidden");
+ $("modeButtons").classList.remove("hidden");
+ $("difficultyList").classList.add("hidden");
  openModal("modeModal");
 }
 function showDifficulties(){
- $("mainModes").style.display="none";
- $("modeIntro").style.display="none";
- $("difficultyList").style.display="grid";
+ $("modeIntro").classList.add("hidden");
+ $("modeButtons").classList.add("hidden");
+ $("difficultyList").classList.remove("hidden");
 }
 function backToModes(){
- $("difficultyList").style.display="none";
- $("mainModes").style.display="grid";
- $("modeIntro").style.display="block";
+ $("modeIntro").classList.remove("hidden");
+ $("modeButtons").classList.remove("hidden");
+ $("difficultyList").classList.add("hidden");
 }
-function ensureAudio(){
- if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
- if(audioCtx.state==="suspended")audioCtx.resume();
+function goHome(){
+ stopClock();busy=false;
+ $("gameView").classList.add("hidden");
+ $("homeView").classList.remove("hidden");
+ document.querySelectorAll(".overlay").forEach(x=>x.classList.add("hidden"));
 }
-function beep(freq=440,duration=.09,type="sine"){
- if(!settings.sound)return;
- try{
-  ensureAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();
-  o.type=type;o.frequency.value=freq;g.gain.value=settings.volume*.12;
-  o.connect(g);g.connect(audioCtx.destination);o.start();
-  g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);
-  o.stop(audioCtx.currentTime+duration);
- }catch(e){}
+function startGame(m,l){
+ mode=m;level=l;humanSide="r";
+ closeModal("modeModal");
+ $("homeView").classList.add("hidden");
+ $("gameView").classList.remove("hidden");
+ $("modeInfo").textContent=(lang==="vi"?"Chế độ: ":"Mode: ")+(mode==="human"?tr("modeHuman"):tr("modeBot")+" · "+[tr("easy"),tr("medium"),tr("hard"),tr("expert")][level-1]);
+ newGame();
 }
-function updateMusicVolume(){
- musicOsc.forEach(x=>{try{x.gain.gain.value=settings.musicVolume*.025}catch(e){}});
-}
-function toggleMusic(on){
- musicOn=on;
- try{ensureAudio()}catch(e){return}
- if(musicTimer){clearInterval(musicTimer);musicTimer=null}
- musicOsc.forEach(x=>{try{x.osc.stop()}catch(e){}});
- musicOsc=[];
- if(!on)return;
- const notes=[220,261.63,329.63,293.66,196,246.94,293.66,261.63];let i=0;
- function playNote(){
-  if(!musicOn)return;
-  try{
-   const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
-   osc.type="sine";osc.frequency.value=notes[i++%notes.length];
-   gain.gain.value=settings.musicVolume*.025;osc.connect(gain);gain.connect(audioCtx.destination);
-   osc.start();gain.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+1.5);
-   osc.stop(audioCtx.currentTime+1.6);musicOsc.push({osc,gain});
-   if(musicOsc.length>20)musicOsc.shift();
-  }catch(e){}
+function initialBoard(){
+ const b=Array.from({length:10},()=>Array(9).fill(null));
+ const back=["R","H","E","A","K","A","E","H","R"];
+ for(let x=0;x<9;x++){
+  b[0][x]="b"+back[x]; b[9][x]="r"+back[x];
  }
- playNote();musicTimer=setInterval(playNote,1300);
+ b[2][1]="bC";b[2][7]="bC";b[7][1]="rC";b[7][7]="rC";
+ for(let x=0;x<9;x+=2){b[3][x]="bP";b[6][x]="rP"}
+ return b;
 }
-
-const initial=[
- ["r","h","e","a","k","a","e","h","r"],
- [null,null,null,null,null,null,null,null,null],
- [null,"c",null,null,null,null,null,"c",null],
- ["s",null,"s",null,"s",null,"s",null,"s"],
- [null,null,null,null,null,null,null,null,null],
- [null,null,null,null,null,null,null,null,null],
- ["S",null,"S",null,"S",null,"S",null,"S"],
- [null,"C",null,null,null,null,null,"C",null],
- [null,null,null,null,null,null,null,null,null],
- ["R","H","E","A","K","A","E","H","R"]
-];
-let board=[],turn="R",selected=null,legal=[],history=[],lastMove=null;
-let mode="human",level=1,ended=false,botBusy=false,hint=null,botTimer=null;
-const redPieces={K:"帥",A:"仕",E:"相",R:"俥",H:"傌",C:"炮",S:"兵"};
-const blackPieces={k:"將",a:"士",e:"象",r:"車",h:"馬",c:"砲",s:"卒"};
-function side(p){return !p?null:(p===p.toUpperCase()?"R":"B")}
-function inside(r,c){return r>=0&&r<10&&c>=0&&c<9}
-function palace(s,r,c){return c>=3&&c<=5&&(s==="R"?r>=7&&r<=9:r>=0&&r<=2)}
-function riverCrossed(s,r){return s==="R"?r<=4:r>=5}
-function pseudoMoves(r,c){
- const p=board[r][c];if(!p)return [];
- const s=side(p),t=p.toLowerCase(),out=[];
- function add(nr,nc){if(inside(nr,nc)&&side(board[nr][nc])!==s)out.push([nr,nc])}
- const orth=[[1,0],[-1,0],[0,1],[0,-1]];
- if(t==="k"){
-  orth.forEach(([dr,dc])=>{let nr=r+dr,nc=c+dc;if(palace(s,nr,nc))add(nr,nc)});
-  const dr=s==="R"?-1:1;
-  for(let nr=r+dr;inside(nr,c);nr+=dr){
-   if(board[nr][c]){
-    if(board[nr][c].toLowerCase()==="k"&&side(board[nr][c])!==s)out.push([nr,c]);
+function newGame(){
+ stopClock();board=initialBoard();turn="r";selected=null;
+ history=[];lastMove=null;hintMove=null;gameOver=false;busy=false;moveCount=0;
+ startedAt=Date.now();$("resultOverlay").classList.add("hidden");
+ drawBoard();updateStatus();updateInfo();startClock();
+}
+function stopClock(){if(clockTimer){clearInterval(clockTimer);clockTimer=null}}
+function startClock(){
+ stopClock();
+ clockTimer=setInterval(()=>{
+  if(!startedAt)return;
+  let s=Math.floor((Date.now()-startedAt)/1000);
+  $("clock").textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+ },1000);
+}
+function updateInfo(){
+ $("moveInfo").textContent=tr("moveCount")+": "+moveCount;
+}
+function updateStatus(msg){
+ if(msg){$("status").textContent=msg;return}
+ if(gameOver)return;
+ $("status").textContent=busy?tr("botThinking")+"…":(turn===humanSide?tr("yourTurn"):(turn==="r"?tr("redTurn"):tr("blackTurn")));
+}
+function coords(x,y){
+ return {left:(6.25+x*12.5)+"%",top:(5.555555+y*11.111111)+"%"};
+}
+const names={
+ rK:"帥",rA:"仕",rE:"相",rH:"傌",rR:"俥",rC:"炮",rP:"兵",
+ bK:"將",bA:"士",bE:"象",bH:"馬",bR:"車",bC:"砲",bP:"卒"
+};
+function drawBoard(){
+ const el=$("board");
+ el.querySelectorAll(".piece").forEach(p=>p.remove());
+ for(let y=0;y<10;y++)for(let x=0;x<9;x++){
+  const p=board[y][x];if(!p)continue;
+  const btn=document.createElement("button");
+  btn.className="piece "+(p[0]==="b"?"black":"");
+  if(selected&&selected.x===x&&selected.y===y)btn.classList.add("selected");
+  if(lastMove&&((lastMove.fx===x&&lastMove.fy===y)||(lastMove.tx===x&&lastMove.ty===y)))btn.classList.add("last");
+  if(hintMove&&((hintMove.fx===x&&hintMove.fy===y)||(hintMove.tx===x&&hintMove.ty===y)))btn.classList.add("hint");
+  btn.textContent=names[p]||"?";
+  btn.setAttribute("aria-label",p);
+  const pos=coords(x,y);btn.style.left=pos.left;btn.style.top=pos.top;
+  btn.onclick=()=>clickSquare(x,y);
+  el.appendChild(btn);
+ }
+}
+function inside(x,y){return x>=0&&x<9&&y>=0&&y<10}
+function palace(s,x,y){return x>=3&&x<=5&&(s==="r"?y>=7&&y<=9:y>=0&&y<=2)}
+function riverSide(s,y){return s==="r"?y<=4:y>=5}
+function addMove(out,x,y,nx,ny,b,side){
+ if(inside(nx,ny)&&(!b[ny][nx]||b[ny][nx][0]!==side))out.push({fx:x,fy:y,tx:nx,ty:ny});
+}
+function pseudoMoves(b,x,y){
+ const p=b[y][x];if(!p)return [];
+ const s=p[0],t=p[1],out=[];
+ const step=(dx,dy)=>addMove(out,x,y,x+dx,y+dy,b,s);
+ if(t==="K"){
+  for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+   const nx=x+dx,ny=y+dy;if(palace(s,nx,ny))step(dx,dy);
+  }
+  for(let ny=y+(s==="r"?-1:1);inside(x,ny);ny+=(s==="r"?-1:1)){
+   if(b[ny][x]){
+    if(b[ny][x][1]==="K"&&b[ny][x][0]!==s)out.push({fx:x,fy:y,tx:x,ty:ny});
     break;
    }
   }
- }else if(t==="a"){
-  [[1,1],[1,-1],[-1,1],[-1,-1]].forEach(([dr,dc])=>{let nr=r+dr,nc=c+dc;if(palace(s,nr,nc))add(nr,nc)});
- }else if(t==="e"){
-  [[2,2],[2,-2],[-2,2],[-2,-2]].forEach(([dr,dc])=>{
-   const nr=r+dr,nc=c+dc;
-   if(inside(nr,nc)&&!riverCrossed(s,nr)&&!board[r+dr/2][c+dc/2])add(nr,nc);
-  });
- }else if(t==="r"){
-  orth.forEach(([dr,dc])=>{
-   let nr=r+dr,nc=c+dc;
-   while(inside(nr,nc)){
-    if(!board[nr][nc])out.push([nr,nc]);
-    else{if(side(board[nr][nc])!==s)out.push([nr,nc]);break}
-    nr+=dr;nc+=dc;
+ }else if(t==="A"){
+  for(const [dx,dy] of [[1,1],[1,-1],[-1,1],[-1,-1]]){
+   const nx=x+dx,ny=y+dy;if(palace(s,nx,ny))step(dx,dy);
+  }
+ }else if(t==="E"){
+  for(const [dx,dy] of [[2,2],[2,-2],[-2,2],[-2,-2]]){
+   const nx=x+dx,ny=y+dy,mx=x+dx/2,my=y+dy/2;
+   if(inside(nx,ny)&&!riverSide(s,ny)&&!b[my][mx])step(dx,dy);
+  }
+ }else if(t==="H"){
+  const opts=[
+   [1,2,0,1],[-1,2,0,1],[1,-2,0,-1],[-1,-2,0,-1],
+   [2,1,1,0],[2,-1,1,0],[-2,1,-1,0],[-2,-1,-1,0]
+  ];
+  for(const [dx,dy,lx,ly] of opts){
+   if(!b[y+ly]?.[x+lx])step(dx,dy);
+  }
+ }else if(t==="R"||t==="C"){
+  for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){
+   let nx=x+dx,ny=y+dy,screen=false;
+   while(inside(nx,ny)){
+    const target=b[ny][nx];
+    if(t==="R"){
+     if(!target)out.push({fx:x,fy:y,tx:nx,ty:ny});
+     else {if(target[0]!==s)out.push({fx:x,fy:y,tx:nx,ty:ny});break}
+    }else{
+     if(!screen){
+      if(!target)out.push({fx:x,fy:y,tx:nx,ty:ny});
+      else screen=true;
+     }else if(target){
+      if(target[0]!==s)out.push({fx:x,fy:y,tx:nx,ty:ny});
+      break;
+     }
+    }
+    nx+=dx;ny+=dy;
    }
-  });
- }else if(t==="c"){
-  orth.forEach(([dr,dc])=>{
-   let nr=r+dr,nc=c+dc,screen=false;
-   while(inside(nr,nc)){
-    if(!screen){if(!board[nr][nc])out.push([nr,nc]);else screen=true}
-    else if(board[nr][nc]){if(side(board[nr][nc])!==s)out.push([nr,nc]);break}
-    nr+=dr;nc+=dc;
-   }
-  });
- }else if(t==="h"){
-  [[-2,-1,-1,0],[-2,1,-1,0],[2,-1,1,0],[2,1,1,0],
-   [-1,-2,0,-1],[1,-2,0,-1],[-1,2,0,1],[1,2,0,1]].forEach(([dr,dc,lr,lc])=>{
-   const nr=r+dr,nc=c+dc;if(inside(nr,nc)&&!board[r+lr][c+lc])add(nr,nc);
-  });
- }else if(t==="s"){
-  const f=s==="R"?-1:1;add(r+f,c);
-  if(riverCrossed(s,r)){add(r,c-1);add(r,c+1)}
+  }
+ }else if(t==="P"){
+  const forward=s==="r"?-1:1;
+  step(0,forward);
+  if(riverSide(s,y)){step(1,0);step(-1,0)}
  }
  return out;
 }
-function findGeneral(s){
- const k=s==="R"?"K":"k";
- for(let r=0;r<10;r++)for(let c=0;c<9;c++)if(board[r][c]===k)return [r,c];
+function copyBoard(b){return b.map(row=>row.slice())}
+function applyMove(b,m){
+ const n=copyBoard(b);n[m.ty][m.tx]=n[m.fy][m.fx];n[m.fy][m.fx]=null;return n;
+}
+function findGeneral(b,s){
+ for(let y=0;y<10;y++)for(let x=0;x<9;x++)if(b[y][x]===s+"K")return {x,y};
  return null;
 }
-function isAttacked(r,c,by){
- for(let y=0;y<10;y++)for(let x=0;x<9;x++){
-  const p=board[y][x];
-  if(p&&side(p)===by&&pseudoMoves(y,x).some(([nr,nc])=>nr===r&&nc===c))return true;
+function attacked(b,x,y,bySide){
+ for(let yy=0;yy<10;yy++)for(let xx=0;xx<9;xx++){
+  const p=b[yy][xx];
+  if(p&&p[0]===bySide&&pseudoMoves(b,xx,yy).some(m=>m.tx===x&&m.ty===y))return true;
  }
  return false;
 }
-function inCheck(s){
- const k=findGeneral(s);if(!k)return true;
- return isAttacked(k[0],k[1],s==="R"?"B":"R");
+function inCheck(b,s){
+ const k=findGeneral(b,s);
+ if(!k)return true;
+ return attacked(b,k.x,k.y,s==="r"?"b":"r");
 }
-function legalMoves(r,c){
- const p=board[r][c];if(!p)return [];
- const s=side(p);
- return pseudoMoves(r,c).filter(([nr,nc])=>{
-  const captured=board[nr][nc];board[nr][nc]=p;board[r][c]=null;
-  const safe=!inCheck(s);board[r][c]=p;board[nr][nc]=captured;return safe;
+function legalMoves(b,s){
+ const out=[];
+ for(let y=0;y<10;y++)for(let x=0;x<9;x++){
+  if(b[y][x]?.[0]!==s)continue;
+  for(const m of pseudoMoves(b,x,y)){
+   const n=applyMove(b,m);
+   if(!inCheck(n,s))out.push(m);
+  }
+ }
+ return out;
+}
+function legalFrom(x,y){return pseudoMoves(board,x,y).filter(m=>!inCheck(applyMove(board,m),turn))}
+function clickSquare(x,y){
+ if(gameOver||busy)return;
+ if(mode==="bot"&&turn!==humanSide)return;
+ const p=board[y][x];
+ if(selected){
+  const m=legalFrom(selected.x,selected.y).find(a=>a.tx===x&&a.ty===y);
+  if(m){makeMove(m);return}
+ }
+ if(p&&p[0]===turn){
+  selected={x,y};hintMove=null;drawBoard();playSound(420,.045);
+ }else{
+  selected=null;drawBoard();updateStatus(tr("invalid"));
+ }
+}
+function makeMove(m,fromBot=false){
+ if(gameOver)return;
+ const mover=turn, captured=board[m.ty][m.tx];
+ history.push({
+  board:copyBoard(board),turn,selected,lastMove: lastMove?{...lastMove}:null,
+  hintMove:hintMove?{...hintMove}:null,moveCount
  });
-}
-function allMoves(s){
- const arr=[];
- for(let r=0;r<10;r++)for(let c=0;c<9;c++)
-  if(side(board[r][c])===s)legalMoves(r,c).forEach(([nr,nc])=>arr.push({r,c,nr,nc}));
- return arr;
-}
-function cloneBoard(){return board.map(row=>row.slice())}
-function newGame(){
- if(botTimer)clearTimeout(botTimer);
- board=initial.map(row=>row.slice());turn="R";selected=null;legal=[];
- history=[];lastMove=null;ended=false;botBusy=false;hint=null;
- $("result").classList.remove("show");updateStatus();drawBoard();beep(330,.1);
-}
-function startGame(m,l){
- mode=m;level=l;newGame();$("home").style.display="none";$("game").style.display="block";
- closeModal("modeModal");drawBoard();
-}
-function goHome(){
- if(botTimer)clearTimeout(botTimer);
- botBusy=false;$("game").style.display="none";$("home").style.display="flex";
- closeModal("settingsModal");closeModal("helpModal");closeModal("modeModal");
-}
-function updateStatus(){
- if(!ended&&!botBusy){
-  $("status").textContent=(turn==="R"?tr("redTurn"):tr("blackTurn"))+ " "+tr("selectPiece");
- }
-}
-function makeMove(m){
- if(ended)return;
- history.push({board:cloneBoard(),turn,lastMove:lastMove?{...lastMove}:null});
- const captured=board[m.nr][m.nc];
- board[m.nr][m.nc]=board[m.r][m.c];board[m.r][m.c]=null;
- lastMove={r:m.r,c:m.c,nr:m.nr,nc:m.nc};selected=null;legal=[];hint=null;
- beep(captured?680:430,.08,captured?"triangle":"sine");
- turn=turn==="R"?"B":"R";
- if(!findGeneral(turn)){finish(turn==="R"?"B":"R");return}
- if(inCheck(turn))$("status").textContent=tr("check")+" "+(turn==="R"?tr("redTurn"):tr("blackTurn"));
+ board=applyMove(board,m);turn=turn==="r"?"b":"r";
+ selected=null;hintMove=null;lastMove={...m};moveCount++;
+ drawBoard();updateInfo();
+ playSound(captured?260:520,captured?.12:.06);
+ if(inCheck(board,turn))updateStatus(tr("check"));
  else updateStatus();
- drawBoard();
- if(allMoves(turn).length===0){finish(turn==="R"?"B":"R");return}
- if(mode==="bot"&&turn==="B"){
-  botBusy=true;$("status").textContent=tr("botThinking");drawBoard();
-  botTimer=setTimeout(botMove,220);
+ const moves=legalMoves(board,turn);
+ if(!moves.length){
+  gameOver=true;busy=false;stopClock();
+  const winner=mover;
+  finishGame(winner===humanSide?tr("redWins").replace("ĐỎ","ĐỎ"):winner==="r"?tr("redWins"):tr("blackWins"),winner);
+  return;
+ }
+ if(mode==="bot"&&turn!==humanSide){
+  busy=true;updateStatus(tr("botThinking")+"…");
+  window.setTimeout(()=>{
+   if(gameOver||mode!=="bot"||turn===humanSide)return;
+   const move=chooseBotMove();
+   if(move){busy=false;makeMove(move,true)}
+   else {busy=false;finishGame(tr("draw"),null)}
+  },2000);
  }
 }
-function finish(winner){
- ended=true;botBusy=false;
- $("resultTitle").textContent=winner==="R"?tr("redWins"):tr("blackWins");
- $("resultText").textContent="";
- $("result").classList.add("show");drawBoard();beep(740,.25,"triangle");
+function finishGame(title,winner){
+ gameOver=true;busy=false;stopClock();
+ $("resultTitle").textContent=title;
+ $("resultText").textContent=winner?(lang==="vi"?"Ván đấu đã kết thúc.":"The game has ended."):(lang==="vi"?"Không còn nước đi hợp lệ.":"No legal moves remain.");
+ $("resultOverlay").classList.remove("hidden");
 }
 function resign(){
- if(ended)return;
- if(!confirm(lang==="vi"?"Bạn có chắc muốn đầu hàng không?":"Are you sure you want to resign?"))return;
- finish(turn==="R"?"B":"R");
+ if(gameOver)return;
+ if(!confirm(tr("resignAsk")))return;
+ const winner=turn==="r"?"b":"r";
+ finishGame(winner==="r"?tr("redWins"):tr("blackWins"),winner);
 }
 function undoMove(){
- if(!history.length||ended)return;
- if(botTimer)clearTimeout(botTimer);
- let steps=(mode==="bot"&&turn==="R"&&history.length>=2)?2:1;
- while(steps--&&history.length){
-  const prev=history.pop();board=prev.board;turn=prev.turn;lastMove=prev.lastMove;
+ if(!history.length||gameOver){updateStatus(tr("noUndo"));return}
+ let count=1;
+ if(mode==="bot"&&history.length>=2&&turn===humanSide)count=2;
+ for(let i=0;i<count&&history.length;i++){
+  const h=history.pop();board=copyBoard(h.board);turn=h.turn;
+  lastMove=h.lastMove;selected=h.selected;hintMove=h.hintMove;moveCount=h.moveCount;
  }
- selected=null;legal=[];hint=null;botBusy=false;ended=false;
- $("result").classList.remove("show");updateStatus();drawBoard();beep(300,.08);
+ busy=false;gameOver=false;$("resultOverlay").classList.add("hidden");
+ drawBoard();updateInfo();updateStatus();playSound(320,.06);
 }
-function hintMove(){
- if(ended||botBusy)return;
- const moves=allMoves(turn);if(!moves.length)return;
+function showHint(){
+ if(gameOver||busy)return;
+ const moves=legalMoves(board,turn);
+ if(!moves.length){updateStatus(tr("noHint"));return}
  let best=moves[0],bestScore=-Infinity;
- const value={k:10000,r:900,c:450,h:400,e:200,a:200,s:100};
- moves.forEach(m=>{
-  let score=Math.random()*2;const target=board[m.nr][m.nc];
-  if(target)score+=(value[target.toLowerCase()]||0);
-  const p=board[m.r][m.c];board[m.nr][m.nc]=p;board[m.r][m.c]=null;
-  if(inCheck("B"))score+=turn==="R"?20:0;
-  if(inCheck("R"))score+=turn==="B"?20:0;
-  board[m.r][m.c]=p;board[m.nr][m.nc]=target;
+ for(const m of moves){
+  const captured=board[m.ty][m.tx];
+  let score=captured?pieceValue(captured[1])*1.4:0;
+  const n=applyMove(board,m);
+  if(inCheck(n,turn==="r"?"b":"r"))score+=8;
+  score+=Math.random()*.1;
   if(score>bestScore){bestScore=score;best=m}
- });
- hint=best;drawBoard();
- $("status").textContent=lang==="vi"?"Gợi ý: nước đi được viền vàng.":"Hint: the suggested move is marked in gold.";
- beep(580,.1);
-}
-const pieceValue={k:10000,r:900,c:450,h:400,e:200,a:200,s:100};
-function evaluate(){
- let score=0;
- for(let r=0;r<10;r++)for(let c=0;c<9;c++){
-  const p=board[r][c];if(!p)continue;
-  const s=side(p),v=pieceValue[p.toLowerCase()]||0;
-  const advance=p.toLowerCase()==="s"?(s==="R"?9-r:r):0;
-  score+=(s==="B"?1:-1)*(v+advance*5);
  }
- if(inCheck("R"))score+=50;
- if(inCheck("B"))score-=50;
+ hintMove={...best};drawBoard();updateStatus(tr("hintText"));playSound(650,.06);
+}
+const VALUES={K:10000,R:900,C:450,H:400,E:200,A:200,P:100};
+function pieceValue(t){return VALUES[t]||0}
+function evaluate(b,side){
+ let score=0;
+ for(let y=0;y<10;y++)for(let x=0;x<9;x++){
+  const p=b[y][x];if(!p)continue;
+  let v=pieceValue(p[1]);
+  if(p[1]==="P")v+=(p[0]==="r"?(9-y):y)*3;
+  if(p[1]==="H"||p[1]==="R")v+=2;
+  score+=p[0]===side?v:-v;
+ }
  return score;
 }
-function orderedMoves(s){
- const moves=allMoves(s);
- moves.forEach(m=>{
-  const target=board[m.nr][m.nc];
-  m.order=(target?(pieceValue[target.toLowerCase()]||0)*2:0)+Math.random()*2;
- });
- moves.sort((a,b)=>b.order-a.order);
- return moves;
-}
-function search(depth,alpha,beta,maximizing){
- const s=maximizing?"B":"R";
- const moves=orderedMoves(s);
- if(depth<=0)return evaluate();
- if(!moves.length)return maximizing?-90000:90000;
- let best=maximizing?-Infinity:Infinity;
- const limit=depth>=2?12:18;
- for(const m of moves.slice(0,limit)){
-  const p=board[m.r][m.c],target=board[m.nr][m.nc];
-  board[m.nr][m.nc]=p;board[m.r][m.c]=null;
-  const score=search(depth-1,alpha,beta,!maximizing);
-  board[m.r][m.c]=p;board[m.nr][m.nc]=target;
-  if(maximizing){best=Math.max(best,score);alpha=Math.max(alpha,best)}
-  else{best=Math.min(best,score);beta=Math.min(beta,best)}
-  if(beta<=alpha)break;
+function chooseBotMove(){
+ const moves=legalMoves(board,turn);
+ if(!moves.length)return null;
+ // Four levels: progressively deeper search with alpha-beta pruning.
+ const depth=[1,1,2,2][level-1];
+ let best=moves[0],bestScore=-Infinity;
+ // At higher levels, shuffle order a little to vary equal moves.
+ moves.sort(()=>Math.random()-.5);
+ for(const m of moves){
+  const n=applyMove(board,m);
+  const score=-search(n,turn==="r"?"b":"r",depth-1,-Infinity,Infinity,turn);
+  if(score>bestScore){bestScore=score;best=m}
  }
  return best;
 }
-function botMove(){
- if(ended||turn!=="B"||mode!=="bot"){botBusy=false;return}
- const moves=allMoves("B");if(!moves.length){finish("R");return}
- if(level===1){
-  const captures=moves.filter(m=>board[m.nr][m.nc]);
-  const pool=captures.length&&Math.random()<.55?captures:moves;
-  const chosen=pool[Math.floor(Math.random()*pool.length)];
-  botBusy=false;makeMove(chosen);return;
- }
- let chosen=moves[0],best=-Infinity;
- const depth=level===2?1:level===3?2:3;
- for(const m of moves){
-  const p=board[m.r][m.c],target=board[m.nr][m.nc];
-  board[m.nr][m.nc]=p;board[m.r][m.c]=null;
-  let score=search(depth-1,-Infinity,Infinity,false);
-  if(target)score+=pieceValue[target.toLowerCase()]||0;
-  board[m.r][m.c]=p;board[m.nr][m.nc]=target;
-  score+=Math.random()*(level===2?50:level===3?8:2);
-  if(score>best){best=score;chosen=m}
- }
- botBusy=false;makeMove(chosen);
-}
-function clickBoard(e){
- if(ended||botBusy||(mode==="bot"&&turn==="B"))return;
- const canvas=$("board"),rect=canvas.getBoundingClientRect();
- const x=(e.clientX-rect.left)*canvas.width/rect.width;
- const y=(e.clientY-rect.top)*canvas.height/rect.height;
- const c=Math.round((x-30)/60),r=Math.round((y-30)/60);
- if(!inside(r,c)||Math.abs(x-(30+c*60))>29||Math.abs(y-(30+r*60))>29)return;
- const p=board[r][c];
- if(selected&&legal.some(([nr,nc])=>nr===r&&nc===c)){
-  makeMove({r:selected[0],c:selected[1],nr:r,nc:c});return;
- }
- if(p&&side(p)===turn){selected=[r,c];legal=legalMoves(r,c);hint=null;beep(510,.06);drawBoard()}
- else{selected=null;legal=[];drawBoard()}
-}
-function drawPiece(ctx,x,y,rad,text,s){
- ctx.beginPath();ctx.arc(x+1,y+2,rad+1,0,Math.PI*2);ctx.fillStyle="#684222";ctx.fill();
- ctx.beginPath();ctx.arc(x,y,rad,0,Math.PI*2);ctx.fillStyle="#ead5a5";ctx.fill();
- ctx.lineWidth=2;ctx.strokeStyle=s==="R"?"#a22b2c":"#302019";ctx.stroke();
- ctx.beginPath();ctx.arc(x,y,rad-4,0,Math.PI*2);ctx.lineWidth=1;
- ctx.strokeStyle=s==="R"?"#bb4840":"#8d6b42";ctx.stroke();
- ctx.fillStyle=s==="R"?"#a31e27":"#29201b";
- ctx.font=`bold ${Math.max(13,rad*1.12)}px Georgia`;
- ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(text,x,y+1);
-}
-function drawBoardCanvas(canvas,isDecor=false){
- if(!canvas)return;
- const ctx=canvas.getContext("2d"),w=canvas.width,h=canvas.height;
- ctx.clearRect(0,0,w,h);ctx.fillStyle="#d9b87c";ctx.fillRect(0,0,w,h);
- const pad=30,dx=(w-pad*2)/8,dy=(h-pad*2)/9;
- ctx.strokeStyle="#55341c";ctx.lineWidth=1.5;
- for(let r=0;r<10;r++){
-  ctx.beginPath();ctx.moveTo(pad,pad+r*dy);ctx.lineTo(w-pad,pad+r*dy);ctx.stroke();
- }
- for(let c=0;c<9;c++){
-  const x=pad+c*dx;ctx.beginPath();
-  if(c===0||c===8){ctx.moveTo(x,pad);ctx.lineTo(x,h-pad)}
-  else{ctx.moveTo(x,pad);ctx.lineTo(x,pad+4*dy);ctx.moveTo(x,pad+5*dy);ctx.lineTo(x,h-pad)}
-  ctx.stroke();
- }
- ctx.beginPath();
- ctx.moveTo(pad+3*dx,pad);ctx.lineTo(pad+5*dx,pad+2*dy);
- ctx.moveTo(pad+5*dx,pad);ctx.lineTo(pad+3*dx,pad+2*dy);
- ctx.moveTo(pad+3*dx,pad+7*dy);ctx.lineTo(pad+5*dx,pad+9*dy);
- ctx.moveTo(pad+5*dx,pad+7*dy);ctx.lineTo(pad+3*dx,pad+9*dy);ctx.stroke();
- ctx.fillStyle="#d9b87c";ctx.fillRect(w/2-45,pad+4.5*dy-13,90,26);
- ctx.fillStyle="#624322";ctx.font=`bold ${isDecor?15:13}px Georgia`;
- ctx.textAlign="center";ctx.textBaseline="middle";
- ctx.fillText(lang==="vi"?"楚 河   漢 界":"RIVER",w/2,pad+4.5*dy);
- if(isDecor){
-  const pieces=[
-   [0,0,"車","B"],[0,4,"將","B"],[0,8,"車","B"],
-   [2,1,"砲","B"],[2,7,"砲","B"],[3,0,"卒","B"],[3,2,"卒","B"],[3,4,"卒","B"],[3,6,"卒","B"],[3,8,"卒","B"],
-   [9,0,"俥","R"],[9,4,"帥","R"],[9,8,"俥","R"],
-   [7,1,"炮","R"],[7,7,"炮","R"],[6,0,"兵","R"],[6,2,"兵","R"],[6,4,"兵","R"],[6,6,"兵","R"],[6,8,"兵","R"]
-  ];
-  pieces.forEach(([r,c,t,s])=>drawPiece(ctx,pad+c*dx,pad+r*dy,Math.min(dx,dy)*.38,t,s));
- }
-}
-function drawBoard(){
- const canvas=$("board");if(!canvas)return;
- const ctx=canvas.getContext("2d");drawBoardCanvas(canvas,false);
- const pad=30,dx=60,dy=60;
- if(lastMove){
-  ctx.fillStyle="rgba(55,140,65,.35)";
-  [[lastMove.r,lastMove.c],[lastMove.nr,lastMove.nc]].forEach(([r,c])=>ctx.fillRect(pad+c*dx-13,pad+r*dy-13,26,26));
- }
- if(hint){
-  ctx.strokeStyle="#e5a829";ctx.lineWidth=4;
-  [[hint.r,hint.c],[hint.nr,hint.nc]].forEach(([r,c])=>{ctx.beginPath();ctx.arc(pad+c*dx,pad+r*dy,20,0,Math.PI*2);ctx.stroke()});
- }
- legal.forEach(([r,c])=>{
-  ctx.beginPath();ctx.arc(pad+c*dx,pad+r*dy,7,0,Math.PI*2);
-  ctx.fillStyle=board[r][c]?"rgba(180,35,30,.75)":"rgba(45,110,52,.7)";ctx.fill();
+function search(b,side,depth,alpha,beta,rootSide){
+ const moves=legalMoves(b,side);
+ if(!moves.length)return inCheck(b,side)?-100000-depth:0;
+ if(depth<=0)return evaluate(b,rootSide);
+ moves.sort((a,c)=>{
+  const va=b[a.ty][a.tx]?pieceValue(b[a.ty][a.tx][1]):0;
+  const vc=b[c.ty][c.tx]?pieceValue(b[c.ty][c.tx][1]):0;
+  return vc-va;
  });
- for(let r=0;r<10;r++)for(let c=0;c<9;c++){
-  const p=board[r][c];if(!p)continue;
-  const x=pad+c*dx,y=pad+r*dy;
-  if(selected&&selected[0]===r&&selected[1]===c){
-   ctx.beginPath();ctx.arc(x,y,25,0,Math.PI*2);ctx.fillStyle="#e9bd56";ctx.fill();
-  }
-  drawPiece(ctx,x,y,22,side(p)==="R"?redPieces[p]:blackPieces[p],side(p));
+ let best=-Infinity;
+ for(const m of moves){
+  const n=applyMove(b,m);
+  const v=-search(n,side==="r"?"b":"r",depth-1,-beta,-alpha,side);
+  // Search returns scores from the side-to-move perspective.
+  const adjusted=side===rootSide?v:-v;
+  if(adjusted>best)best=adjusted;
+  alpha=Math.max(alpha,adjusted);
+  if(alpha>=beta)break;
  }
+ return best===-Infinity?evaluate(b,rootSide):best;
 }
-$("board").addEventListener("click",clickBoard);
-function init(){
- $("guideContent").innerHTML=tr("guide");
- drawBoardCanvas($("decorBoard"),true);
- changeLanguage("vi");newGame();
+function playSound(freq,duration){
+ if(!soundOn||soundVol<=0)return;
+ try{
+  audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.type="sine";o.frequency.value=freq;
+  g.gain.value=soundVol*.08;
+  o.connect(g);g.connect(audioCtx.destination);
+  o.start();g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);
+  o.stop(audioCtx.currentTime+duration);
+ }catch(e){}
 }
-init();
+function toggleMusic(on){
+ musicOn=on;
+ if(!on){if(musicTimer)clearInterval(musicTimer);musicTimer=null;return}
+ try{
+  audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+  if(musicTimer)clearInterval(musicTimer);
+  const notes=[196,246.94,293.66,246.94,174.61,220,261.63,220];
+  let i=0;
+  musicTimer=setInterval(()=>{
+   if(!musicOn||musicVol<=0)return;
+   try{
+    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.type="sine";o.frequency.value=notes[i++%notes.length];
+    g.gain.value=musicVol*.035;
+    o.connect(g);g.connect(audioCtx.destination);
+    o.start();g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+1.1);
+    o.stop(audioCtx.currentTime+1.1);
+   }catch(e){}
+  },1250);
+ }catch(e){}
+}
+function updateMusicVolume(){/* Volume is read when each note plays. */}
+applyTranslations();
 </script>
 </body>
 </html>
 """
 
-components.html(HTML, height=1250, scrolling=True)
-
+components.html(HTML, height=1800, scrolling=True)

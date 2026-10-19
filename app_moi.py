@@ -2,156 +2,226 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-st.set_page_config(page_title="Cờ Tướng", page_icon="♟", layout="wide")
+st.set_page_config(
+    page_title="Cờ Tướng",
+    page_icon="♟",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 
 st.markdown("""
 <style>
-#MainMenu,header,footer,[data-testid="stToolbar"]{display:none!important}
-.block-container{padding:0!important;max-width:100%!important}
-iframe{width:100%!important;border:0!important}
+#MainMenu, header, footer, [data-testid="stToolbar"],
+[data-testid="stHeader"], [data-testid="stDecoration"] {
+    display: none !important;
+}
+.block-container {
+    padding: 0 !important;
+    max-width: 100% !important;
+}
+iframe {
+    width: 100% !important;
+    border: none !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
-HTML = r'''<!DOCTYPE html>
+HTML = r'''
+<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden}
-body{font-family:Arial,"DejaVu Sans",sans-serif;color:#ffedce;background:#190b08}
-button{cursor:pointer;font-family:inherit}
-#app{height:100dvh;display:flex;justify-content:center;align-items:center;padding:8px}
-.screen{display:none;width:min(100%,850px);height:100%;min-height:0}
-.screen.active{display:flex}
-#home{align-items:center;justify-content:center}
-.hero{width:100%;height:100%;max-height:740px;display:flex;align-items:center;
-justify-content:center;text-align:center;border:2px solid #e6bb68;border-radius:15px;
-background:radial-gradient(ellipse,#78451f,#321811 58%,#170907);position:relative;overflow:hidden}
-.hero:before{content:"";position:absolute;inset:5%;border:1px solid #e6bb6860}
-.hero-content{position:relative;width:min(88%,360px)}
-h1{font-size:clamp(36px,7vw,58px);letter-spacing:4px;color:#ffe3a0;margin:0 0 8px}
-.subtitle{letter-spacing:3px;font-size:12px;margin-bottom:25px;color:#e6c58c}
-.btn{display:block;width:100%;padding:12px;margin:8px 0;border:1px solid #e6bb68;
-border-radius:8px;background:linear-gradient(135deg,#674022,#321811);
-color:#fff0d0;font-weight:bold;font-size:15px}
-.btn.gold{background:linear-gradient(135deg,#f5d891,#bd8539);color:#291409}
-.btn.dark{background:#21110e}
-#game{align-items:center;justify-content:center}
-.layout{width:min(100%,650px);height:100%;display:flex;flex-direction:column;
-justify-content:center;gap:5px;min-height:0}
-.top{display:flex;align-items:center;justify-content:space-between;gap:7px}
-.top button{width:auto;margin:0;padding:7px 10px}
-.title{font-weight:bold;letter-spacing:2px;color:#ffe3a0}
-.players{display:flex;justify-content:space-between;background:#321a12;
-border:1px solid #8d6539;padding:5px 8px;border-radius:6px;font-size:12px}
-#boardWrap{position:relative;width:min(100%,calc((100dvh - 205px)*.78));
-max-height:calc(100dvh - 205px);aspect-ratio:680/760;margin:0 auto}
-canvas{width:100%;height:100%;display:block;touch-action:manipulation}
-.tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
-.tools button{margin:0;padding:8px 1px;font-size:12px;color:#ffedce;
-background:#352018;border:1px solid #90683e;border-radius:7px}
-#status{text-align:center;font-size:12px;color:#e6c58c;min-height:16px}
-.modal{position:fixed;inset:0;z-index:20;display:flex;align-items:center;
-justify-content:center;padding:12px;background:#080403e8}
-.hidden{display:none!important}
-.dialog{width:min(100%,370px);max-height:90dvh;overflow:auto;padding:20px;
-border:2px solid #e6bb68;border-radius:12px;background:linear-gradient(145deg,#48271b,#1b0c09)}
-.dialog h2{text-align:center;color:#ffe3a0;margin:0 0 15px;font-size:21px}
-.dialog label{font-size:14px}
-.setting{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:15px 0}
-.setting input[type=range]{width:45%}
-.setting input[type=checkbox]{width:18px;height:18px;accent-color:#e6bb68}
-.result{position:absolute;inset:0;z-index:10;background:#130705ed;
-display:flex;align-items:center;justify-content:center;text-align:center}
-.result h2{font-size:clamp(30px,7vw,50px);color:#ffe3a0}
-@media(max-height:740px){
- #boardWrap{width:min(100%,calc((100dvh - 180px)*.78));max-height:calc(100dvh - 180px)}
- .btn{padding:9px;margin:6px 0}
- .tools button{padding:6px 1px}
+:root{
+ --gold:#e4bd72;--gold2:#ffe7ae;--wood:#351c12;
+ --panel:#21110c;--text:#f5e6c8;--muted:#cbb48e;
 }
-@media(max-width:500px){
- #app{padding:3px}
- #boardWrap{width:min(100%,calc((100dvh - 200px)*.78));max-height:calc(100dvh - 200px)}
- .tools button{font-size:10px}
+body{
+ margin:0;color:var(--text);
+ font-family:Georgia,"Times New Roman",serif;
+ background:radial-gradient(ellipse at top,#68432b 0%,#28150e 55%,#100806 100%);
+ min-height:100vh;
+}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--gold2);outline-offset:3px}
+#app{max-width:1100px;margin:auto;padding:14px}
+.topbar{
+ display:flex;justify-content:space-between;align-items:center;
+ gap:10px;margin-bottom:12px;flex-wrap:wrap
+}
+.brand{font-size:13px;letter-spacing:3px;color:var(--gold)}
+.small-btn,.btn,.tool{
+ color:var(--text);border:1px solid #987044;
+ background:linear-gradient(145deg,#563421,#29160e);
+ border-radius:10px;padding:10px 15px;
+ box-shadow:0 4px 12px #0004;transition:.18s;
+}
+.small-btn:hover,.btn:hover,.tool:hover{
+ background:linear-gradient(145deg,#81562f,#482719);
+ border-color:var(--gold2);transform:translateY(-1px)
+}
+.hero{
+ position:relative;overflow:hidden;text-align:center;
+ min-height:calc(100vh - 70px);display:flex;
+ align-items:center;justify-content:center;padding:28px 16px;
+ border:2px solid var(--gold);border-radius:20px;
+ background:
+ radial-gradient(ellipse at 50% 30%,#79502e 0%,#482719 48%,#1b0b08 100%);
+ box-shadow:0 15px 45px #0008,inset 0 0 35px #0005;
+}
+.hero:before{
+ content:"";position:absolute;inset:12px;border:1px solid #e5c47b70;
+ border-radius:12px;pointer-events:none
+}
+.hero-inner{position:relative;z-index:1;width:min(100%,460px)}
+.eyebrow{color:var(--gold);font-size:12px;letter-spacing:5px}
+h1{font-size:clamp(35px,7vw,66px);letter-spacing:5px;
+ color:#ffe6a4;text-shadow:0 4px 15px #000b;margin:18px 0 8px}
+.subtitle{color:#dfc69c;letter-spacing:2px;font-size:13px;margin-bottom:28px}
+.menu{display:grid;gap:12px;max-width:330px;margin:0 auto}
+.btn{font-size:15px;padding:14px 18px}
+.btn.gold{
+ background:linear-gradient(135deg,#f0d18a,#b8893e);
+ border-color:#ffe8b0;color:#2a160d;font-weight:bold
+}
+.btn.gold:hover{background:linear-gradient(135deg,#ffe9b1,#d3a34f)}
+.btn.secondary{background:#29150f}
+.footer-note{color:#c7ac81;font-size:11px;letter-spacing:1px;margin-top:28px}
+#game{display:none}
+.layout{
+ padding:12px;border:1px solid #b58b4b;border-radius:15px;
+ background:linear-gradient(145deg,#42271a,#1d100b);
+ box-shadow:0 10px 30px #0007
+}
+.game-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.game-title{font-size:17px;color:var(--gold2);letter-spacing:2px}
+.status{font-size:13px;color:var(--muted)}
+.players{display:flex;gap:8px;margin-bottom:10px}
+.player{
+ flex:1;text-align:center;padding:9px 6px;border:1px solid #785333;
+ border-radius:9px;background:#24130d;color:#d9c19a;font-size:12px
+}
+.player.active{border-color:#e7c77b;background:#51321e;color:#ffe9b2}
+.player strong{display:block;font-size:14px;margin-bottom:3px}
+.board-area{display:flex;justify-content:center}
+#board{
+ display:block;width:min(100%,610px);height:auto;
+ border:2px solid #d0a45c;border-radius:5px;
+ box-shadow:0 8px 24px #0008;background:#d8b77b;
+ touch-action:manipulation
+}
+.tools-title{color:var(--gold);font-size:12px;letter-spacing:2px;margin:14px 0 8px}
+.tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.tool{padding:11px 5px;font-size:12px}
+.tool:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.hintline{font-size:12px;color:#d9c19a;min-height:18px;margin-top:10px}
+#modal{
+ display:none;position:fixed;inset:0;z-index:10;
+ background:#080403d9;backdrop-filter:blur(7px);
+ align-items:center;justify-content:center;padding:16px
+}
+.dialog{
+ width:min(100%,420px);max-height:90vh;overflow:auto;
+ border:1px solid #d0aa60;border-radius:16px;
+ background:linear-gradient(145deg,#4a2a1b,#1b0d08);
+ padding:23px;box-shadow:0 18px 55px #000b
+}
+.dialog h2{color:#ffe2a0;text-align:center;margin:0 0 18px;font-size:23px}
+.dialog-buttons{display:grid;gap:10px}
+.dialog .btn{width:100%}
+.close-row{display:flex;justify-content:flex-end;margin-top:14px}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #755034}
+.setting-row label{font-size:14px}
+input[type=range]{width:130px;accent-color:#e4bd72}
+input[type=checkbox]{accent-color:#d4a65b;width:18px;height:18px}
+#result{
+ display:none;position:fixed;inset:0;z-index:8;
+ background:#120805eF;align-items:center;justify-content:center;
+ text-align:center;padding:20px
+}
+.result-card{width:min(100%,480px);border:2px solid var(--gold);
+ border-radius:18px;padding:35px 20px;background:linear-gradient(145deg,#57331e,#1b0b07);
+ box-shadow:0 0 45px #000b}
+#result h2{font-size:clamp(35px,8vw,60px);color:#ffe2a0;margin:0 0 12px}
+#result p{color:#e1c69a;margin-bottom:22px}
+@media(max-width:600px){
+ #app{padding:7px}
+ .hero{min-height:calc(100vh - 20px);padding:20px 12px}
+ .layout{padding:7px}
+ .game-title{font-size:14px}
+ .small-btn{padding:8px 10px}
+ .tools{gap:5px}
+ .tool{font-size:11px;padding:10px 2px}
+ .player{font-size:11px;padding:7px 3px}
+ .player strong{font-size:12px}
 }
 </style>
 </head>
 <body>
 <div id="app">
-<section id="home" class="screen active">
- <div class="hero">
-  <div class="hero-content">
+ <section id="home" class="hero">
+  <div class="hero-inner">
+   <div class="eyebrow">TRÍ TUỆ • CHIẾN LƯỢC</div>
    <h1>CỜ TƯỚNG</h1>
-   <div class="subtitle">TRÍ TUỆ • CHIẾN LƯỢC</div>
-   <button class="btn gold" data-action="difficulty">♟ Đấu với máy</button>
-   <button class="btn" data-action="two">⚔ Đấu hai người</button>
-   <button class="btn" data-action="rules">📜 Luật chơi</button>
-   <button class="btn dark" data-action="settings">⚙ Cài đặt</button>
-  </div>
- </div>
-</section>
-
-<section id="game" class="screen">
- <div class="layout">
-  <div class="top">
-   <button class="btn" style="width:auto" data-action="settings">⚙</button>
-   <div class="title">CỜ TƯỚNG</div>
-   <button class="btn" style="width:auto" data-action="home">⌂ Menu</button>
-  </div>
-  <div class="players"><span id="redLabel">🔴 ĐỎ: Bot</span><span id="clock">00:00</span><span>⚫ ĐEN: Bạn</span></div>
-  <div id="boardWrap">
-   <canvas id="board" width="680" height="760"></canvas>
-   <div id="result" class="result hidden">
-    <div><h2 id="resultText">CHIẾN THẮNG</h2>
-     <button class="btn gold" data-action="new">Ván mới</button>
-     <button class="btn" data-action="home">Về menu</button>
-    </div>
+   <div class="subtitle">KHAI CUỘC · ĐẤU TRÍ · CHIẾN THẮNG</div>
+   <div class="menu">
+    <button class="btn gold" data-action="difficulty">♟ ĐẤU VỚI MÁY</button>
+    <button class="btn" data-action="two">⚔ ĐẤU HAI NGƯỜI</button>
+    <button class="btn" data-action="rules">📜 LUẬT CHƠI</button>
+    <button class="btn secondary" data-action="settings">⚙ CÀI ĐẶT</button>
    </div>
+   <div class="footer-note">TĨNH TÂM • QUAN SÁT • RA QUYẾT ĐỊNH</div>
   </div>
-  <div class="tools">
-   <button data-action="hint">💡 Gợi ý</button>
-   <button data-action="undo">↶ Đi lại</button>
-   <button data-action="new">⟳ Ván mới</button>
-   <button data-action="surrender">🏳 Đầu hàng</button>
+ </section>
+
+ <section id="game">
+  <div class="topbar">
+   <div class="brand">♟ CỜ TƯỚNG</div>
+   <button class="small-btn" data-action="settings">⚙ Cài đặt</button>
   </div>
-  <div id="status">ĐEN đi trước</div>
- </div>
-</section>
+  <div class="layout">
+   <div class="game-head">
+    <div>
+     <div class="game-title" id="modeTitle">ĐẤU VỚI MÁY</div>
+     <div class="status" id="status">Lượt quân Đen</div>
+    </div>
+    <div class="status" id="clock">00:00</div>
+   </div>
+   <div class="players">
+    <div class="player" id="redPlayer"><strong>🔴 QUÂN ĐỎ</strong><span id="redDesc">Máy</span></div>
+    <div class="player active" id="blackPlayer"><strong>⚫ QUÂN ĐEN</strong><span id="blackDesc">Bạn · đi trước</span></div>
+   </div>
+   <div class="board-area"><canvas id="board" width="720" height="800" aria-label="Bàn cờ tướng"></canvas></div>
+   <div class="tools-title">CÔNG CỤ TRẬN ĐẤU</div>
+   <div class="tools">
+    <button class="tool" data-action="hint">✦ Gợi ý</button>
+    <button class="tool" data-action="undo">↶ Đi lại</button>
+    <button class="tool" data-action="new">⟳ Ván mới</button>
+    <button class="tool" data-action="surrender">⚑ Đầu hàng</button>
+   </div>
+   <div class="hintline" id="hintline">Chọn quân Đen, sau đó chọn vị trí muốn đi.</div>
+  </div>
+ </section>
 </div>
 
-<div id="difficulty" class="modal hidden">
+<div id="modal">
  <div class="dialog">
-  <h2>CHỌN ĐỘ KHÓ</h2>
-  <button class="btn" data-mode="easy">🌱 Dễ</button>
-  <button class="btn" data-mode="medium">🗡 Trung bình</button>
-  <button class="btn" data-mode="hard">🔥 Khó</button>
-  <button class="btn gold" data-mode="expert">👑 Siêu khó</button>
-  <button class="btn dark" data-action="close">Quay lại</button>
+  <h2 id="modalTitle">CHỌN CHẾ ĐỘ</h2>
+  <div id="modalContent"></div>
+  <div class="close-row"><button class="small-btn" data-action="close">Đóng ✕</button></div>
  </div>
 </div>
 
-<div id="settings" class="modal hidden">
- <div class="dialog">
-  <h2>CÀI ĐẶT</h2>
-  <div class="setting"><label for="music">Nhạc nền mặc định bật</label><input id="music" type="checkbox" checked></div>
-  <div class="setting"><label for="effects">Âm thanh nước đi</label><input id="effects" type="checkbox" checked></div>
-  <div class="setting"><label for="volume">Âm lượng</label><input id="volume" type="range" min="0" max="100" value="30"></div>
-  <button class="btn gold" data-action="close">Lưu và đóng</button>
- </div>
-</div>
-
-<div id="rules" class="modal hidden">
- <div class="dialog">
-  <h2>LUẬT CHƠI</h2>
-  <p>• ĐEN đi trước, ĐỎ đi sau.</p>
-  <p>• Xe đi ngang hoặc dọc, không nhảy qua quân.</p>
-  <p>• Pháo đi ngang hoặc dọc; khi ăn phải nhảy qua một quân.</p>
-  <p>• Mã đi hình chữ L và có thể bị cản.</p>
-  <p>• Tượng đi chéo hai ô; Sĩ đi chéo một ô trong cung.</p>
-  <p>• Tốt đi thẳng; qua sông được đi ngang.</p>
-  <button class="btn gold" data-action="close">Đã hiểu</button>
+<div id="result">
+ <div class="result-card">
+  <h2 id="resultTitle">CHIẾN THẮNG</h2>
+  <p id="resultText">Ván đấu đã kết thúc.</p>
+  <div class="dialog-buttons">
+   <button class="btn gold" data-action="new">Chơi lại</button>
+   <button class="btn" data-action="home">Về màn hình chính</button>
+  </div>
  </div>
 </div>
 
@@ -159,259 +229,388 @@ display:flex;align-items:center;justify-content:center;text-align:center}
 "use strict";
 const $=id=>document.getElementById(id);
 const canvas=$("board"),ctx=canvas.getContext("2d");
-const L=50,T=40,DX=72.5,DY=75;
-let board,turn="b",selected=null,moves=[],history=[],lastMove=null;
-let mode="easy",gameType="bot",finished=false,hintMove=null;
-let audioCtx=null,osc=null,musicGain=null,musicTimer=null;
-let startTime=Date.now(),volume=.3;
+const W=720,H=800,X0=40,Y0=40,DX=80,DY=80;
+let board=[],turn="B",mode="bot",difficulty="medium";
+let selected=null,legal=[],history=[],ended=false,startedAt=Date.now();
+let soundOn=true,musicOn=false,volume=.35,audioCtx=null,musicTimer=null;
+let lastMove=null,hintMove=null,elapsed=0;
+const glyph={
+ BR:"俥",BH:"傌",BE:"相",BA:"仕",BK:"帥",BC:"炮",BP:"兵",
+ RR:"車",RH:"馬",RE:"象",RA:"士",RK:"將",RC:"砲",RP:"卒"
+};
+const difficultyNames={easy:"Dễ",medium:"Trung bình",hard:"Khó",expert:"Siêu khó"};
 
-function screen(id){
- document.querySelectorAll(".screen").forEach(e=>e.classList.remove("active"));
- $(id).classList.add("active");
-}
-function closeModals(){document.querySelectorAll(".modal").forEach(e=>e.classList.add("hidden"))}
-function modal(id){closeModals();$(id).classList.remove("hidden")}
-function status(s){$("status").textContent=s}
-function opponent(s){return s==="b"?"r":"b"}
-function side(p){return p?p[0]:null}
-function type(p){return p?p[1]:null}
-function inside(y,x){return y>=0&&y<10&&x>=0&&x<9}
-function clone(b){return b.map(r=>r.slice())}
-function palace(s,y,x){return x>=3&&x<=5&&(s==="r"?y<=2:y>=7)}
-function initial(){
- let b=Array.from({length:10},()=>Array(9).fill(null));
- let back=["R","H","E","A","K","A","E","H","R"];
- for(let x=0;x<9;x++){b[0][x]="r"+back[x];b[9][x]="b"+back[x]}
- b[2][1]="rC";b[2][7]="rC";b[7][1]="bC";b[7][7]="bC";
- for(let x=0;x<9;x+=2){b[3][x]="rP";b[6][x]="bP"}
+function initialBoard(){
+ const b=Array.from({length:10},()=>Array(9).fill(null));
+ const back=["R","H","E","A","K","A","E","H","R"];
+ for(let c=0;c<9;c++){
+  b[0][c]={s:"R",t:back[c]};
+  b[9][c]={s:"B",t:back[c]};
+ }
+ b[2][1]={s:"R",t:"C"};b[2][7]={s:"R",t:"C"};
+ b[7][1]={s:"B",t:"C"};b[7][7]={s:"B",t:"C"};
+ for(const c of [0,2,4,6,8]){
+  b[3][c]={s:"R",t:"P"};
+  b[6][c]={s:"B",t:"P"};
+ }
  return b;
 }
-function add(a,y,x,ny,nx,s){
- if(!inside(ny,nx))return;
- if(!board[ny][nx]||side(board[ny][nx])!==s)a.push({y,x,ny,nx});
+function cloneBoard(b){return b.map(row=>row.map(p=>p?{...p}:null))}
+function inside(r,c){return r>=0&&r<10&&c>=0&&c<9}
+function palace(s,r,c){
+ return c>=3&&c<=5&&(s==="R"?r>=0&&r<=2:r>=7&&r<=9);
 }
-function pseudo(y,x){
- let p=board[y][x];if(!p)return [];
- let s=side(p),t=type(p),a=[],step=s==="r"?1:-1;
- if(t==="K"){
-  for(let [dy,dx] of [[1,0],[-1,0],[0,1],[0,-1]]){
-   let ny=y+dy,nx=x+dx;if(palace(s,ny,nx))add(a,y,x,ny,nx,s);
-  }
-  for(let ny=y+step;inside(ny,x);ny+=step){
-   if(board[ny][x]){
-    if(type(board[ny][x])==="K"&&side(board[ny][x])!==s)a.push({y,x,ny,nx:x});
-    break;
+function clearPath(r,c,nr,nc){
+ const dr=Math.sign(nr-r),dc=Math.sign(nc-c);let count=0;
+ let y=r+dr,x=c+dc;
+ while(y!==nr||x!==nc){if(board[y][x])count++;y+=dr;x+=dc}
+ return count;
+}
+function pseudoMoves(r,c,b=board){
+ const p=b[r][c];if(!p)return [];
+ const out=[],s=p.s,enemy=s==="B"?"R":"B";
+ function add(nr,nc){
+  if(!inside(nr,nc))return;
+  if(b[nr][nc]&&b[nr][nc].s===s)return;
+  out.push([nr,nc]);
+ }
+ if(p.t==="R"||p.t==="C"){
+  for(const [dr,dc] of [[1,0],[-1,0],[0,1],[0,-1]]){
+   let nr=r+dr,nc=c+dc,seen=false;
+   while(inside(nr,nc)){
+    if(p.t==="R"){
+     if(!b[nr][nc])add(nr,nc);
+     else{if(b[nr][nc].s===enemy)add(nr,nc);break}
+    }else{
+     if(!seen){if(!b[nr][nc])add(nr,nc);else seen=true}
+     else if(b[nr][nc]){if(b[nr][nc].s===enemy)add(nr,nc);break}
+    }
+    nr+=dr;nc+=dc;
    }
   }
- }else if(t==="A"){
-  for(let [dy,dx] of [[1,1],[1,-1],[-1,1],[-1,-1]]){
-   let ny=y+dy,nx=x+dx;if(palace(s,ny,nx))add(a,y,x,ny,nx,s);
-  }
- }else if(t==="E"){
-  for(let [dy,dx] of [[2,2],[2,-2],[-2,2],[-2,-2]]){
-   let ny=y+dy,nx=x+dx;
-   if(!inside(ny,nx)||(s==="r"&&ny>4)||(s==="b"&&ny<5))continue;
-   if(!board[y+dy/2][x+dx/2])add(a,y,x,ny,nx,s);
-  }
- }else if(t==="H"){
-  for(let [dy,dx,ly,lx] of [
+ }
+ if(p.t==="H"){
+  const hs=[
    [-2,-1,-1,0],[-2,1,-1,0],[2,-1,1,0],[2,1,1,0],
    [-1,-2,0,-1],[1,-2,0,-1],[-1,2,0,1],[1,2,0,1]
-  ]){
-   let ny=y+dy,nx=x+dx;
-   if(inside(ny,nx)&&!board[y+ly][x+lx])add(a,y,x,ny,nx,s);
+  ];
+  for(const [dr,dc,lr,lc] of hs){
+   const nr=r+dr,nc=c+dc;
+   if(inside(nr,nc)&&inside(r+lr,c+lc)&&!b[r+lr][c+lc])add(nr,nc);
   }
- }else if(t==="R"||t==="C"){
-  for(let [dy,dx] of [[1,0],[-1,0],[0,1],[0,-1]]){
-   let ny=y+dy,nx=x+dx,screened=false;
-   while(inside(ny,nx)){
-    let q=board[ny][nx];
-    if(t==="R"){
-     if(!q)add(a,y,x,ny,nx,s);
-     else{if(side(q)!==s)add(a,y,x,ny,nx,s);break}
-    }else{
-     if(!screened){if(!q)add(a,y,x,ny,nx,s);else screened=true}
-     else if(q){if(side(q)!==s)add(a,y,x,ny,nx,s);break}
+ }
+ if(p.t==="E"||p.t==="A"){
+  const steps=p.t==="E"?[[2,2],[2,-2],[-2,2],[-2,-2]]:[[1,1],[1,-1],[-1,1],[-1,-1]];
+  for(const [dr,dc] of steps){
+   const nr=r+dr,nc=c+dc;
+   if(!inside(nr,nc))continue;
+   if(p.t==="E"&&((s==="B"&&nr<5)||(s==="R"&&nr>4)))continue;
+   if(p.t==="A"&&!palace(s,nr,nc))continue;
+   if(p.t==="E"&&b[r+dr/2][c+dc/2])continue;
+   add(nr,nc);
+  }
+ }
+ if(p.t==="K"){
+  for(const [dr,dc] of [[1,0],[-1,0],[0,1],[0,-1]]){
+   const nr=r+dr,nc=c+dc;
+   if(inside(nr,nc)&&palace(s,nr,nc))add(nr,nc);
+  }
+  for(const dr of [-1,1]){
+   let nr=r+dr;
+   while(inside(nr,c)){
+    if(b[nr][c]){
+     if(b[nr][c].t==="K"&&b[nr][c].s!==s)out.push([nr,c]);
+     break;
     }
-    ny+=dy;nx+=dx;
+    nr+=dr;
    }
   }
- }else if(t==="P"){
-  add(a,y,x,y+step,x,s);
-  if(s==="b"?y<=4:y>=5){add(a,y,x,y,x-1,s);add(a,y,x,y,x+1,s)}
  }
- return a;
+ if(p.t==="P"){
+  const forward=s==="B"?-1:1;
+  add(r+forward,c);
+  const crossed=s==="B"?r<=4:r>=5;
+  if(crossed){add(r,c-1);add(r,c+1)}
+ }
+ return out;
 }
-function allMoves(s){
- let a=[];
- for(let y=0;y<10;y++)for(let x=0;x<9;x++)
-  if(side(board[y][x])===s)a.push(...pseudo(y,x));
- return a;
+function movesFor(r,c,b=board){
+ return pseudoMoves(r,c,b);
 }
 function draw(){
- ctx.clearRect(0,0,680,760);
- let grad=ctx.createLinearGradient(0,0,680,760);
- grad.addColorStop(0,"#f0d59a");grad.addColorStop(1,"#c18b47");
- ctx.fillStyle=grad;ctx.fillRect(0,0,680,760);
- ctx.strokeStyle="#59341c";ctx.lineWidth=2;
- for(let y=0;y<10;y++){
-  ctx.beginPath();ctx.moveTo(L,T+y*DY);ctx.lineTo(L+8*DX,T+y*DY);ctx.stroke();
+ ctx.clearRect(0,0,W,H);
+ const grad=ctx.createLinearGradient(0,0,W,H);
+ grad.addColorStop(0,"#edcf91");grad.addColorStop(1,"#c79a58");
+ ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+ ctx.strokeStyle="#4b2b16";ctx.lineWidth=2.2;
+ ctx.strokeRect(X0,Y0,DX*8,DY*9);
+ for(let c=0;c<9;c++){
+  ctx.beginPath();ctx.moveTo(X0+c*DX,Y0);ctx.lineTo(X0+c*DX,Y0+DY*9);ctx.stroke();
  }
- for(let x=0;x<9;x++){
-  ctx.beginPath();ctx.moveTo(L+x*DX,T);ctx.lineTo(L+x*DX,T+4*DY);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(L+x*DX,T+5*DY);ctx.lineTo(L+x*DX,T+9*DY);ctx.stroke();
+ for(let r=0;r<10;r++){
+  ctx.beginPath();ctx.moveTo(X0,Y0+r*DY);ctx.lineTo(X0+DX*8,Y0+r*DY);ctx.stroke();
  }
- for(let x of [3,5]){
-  ctx.beginPath();ctx.moveTo(L+x*DX,T);ctx.lineTo(L+(8-x)*DX,T+2*DY);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(L+(8-x)*DX,T);ctx.lineTo(L+x*DX,T+2*DY);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(L+x*DX,T+7*DY);ctx.lineTo(L+(8-x)*DX,T+9*DY);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(L+(8-x)*DX,T+7*DY);ctx.lineTo(L+x*DX,T+9*DY);ctx.stroke();
+ ctx.clearRect(X0+1,Y0+DY*4+1,DX*8-2,DY-2);
+ ctx.fillStyle="#cfa86c";ctx.fillRect(X0+1,Y0+DY*4+1,DX*8-2,DY-2);
+ ctx.fillStyle="#5b321a";ctx.font="italic 30px Georgia";ctx.textAlign="center";
+ ctx.fillText("楚 河",X0+DX*2,Y0+DY*4+46);
+ ctx.fillText("漢 界",X0+DX*6,Y0+DY*4+46);
+ ctx.strokeStyle="#4b2b16";ctx.lineWidth=2;
+ for(const [x1,y1,x2,y2] of [
+  [X0+3*DX,Y0,X0+5*DX,Y0+2*DY],
+  [X0+5*DX,Y0,X0+3*DX,Y0+2*DY],
+  [X0+3*DX,Y0+7*DY,X0+5*DX,Y0+9*DY],
+  [X0+5*DX,Y0+7*DY,X0+3*DX,Y0+9*DY]
+ ]){
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
  }
- ctx.fillStyle="#59341c";ctx.font="bold 24px Arial";ctx.textAlign="center";
- ctx.fillText("楚 河",L+2*DX,T+4.72*DY);ctx.fillText("漢 界",L+6*DX,T+4.72*DY);
- ctx.strokeRect(L,T,8*DX,9*DY);
- function ring(y,x,c){ctx.beginPath();ctx.arc(L+x*DX,T+y*DY,27,0,Math.PI*2);ctx.strokeStyle=c;ctx.lineWidth=4;ctx.stroke()}
- if(selected)ring(selected.y,selected.x,"#21844e");
- if(lastMove)ring(lastMove.ny,lastMove.nx,"#c3972e");
- if(hintMove){ring(hintMove.y,hintMove.x,"#267ac5");ring(hintMove.ny,hintMove.nx,"#267ac5")}
- for(let m of moves){
-  ctx.beginPath();ctx.arc(L+m.nx*DX,T+m.ny*DY,7,0,Math.PI*2);
-  ctx.fillStyle=board[m.ny][m.nx]?"#bd3025":"#27804c";ctx.fill();
+ for(const [r,c] of legal){
+  ctx.beginPath();ctx.arc(X0+c*DX,Y0+r*DY,10,0,Math.PI*2);
+  ctx.fillStyle=board[r][c]?"#b43a24aa":"#3c8c47b8";ctx.fill();
  }
- const red={K:"帥",A:"仕",E:"相",H:"傌",R:"俥",C:"炮",P:"兵"};
- const black={K:"將",A:"士",E:"象",H:"馬",R:"車",C:"炮",P:"卒"};
- for(let y=0;y<10;y++)for(let x=0;x<9;x++){
-  let p=board[y][x];if(!p)continue;
-  let cx=L+x*DX,cy=T+y*DY;
-  ctx.beginPath();ctx.arc(cx,cy,24,0,Math.PI*2);
-  ctx.fillStyle="#f7e6bd";ctx.fill();ctx.strokeStyle="#754522";ctx.lineWidth=2.5;ctx.stroke();
-  ctx.beginPath();ctx.arc(cx,cy,19,0,Math.PI*2);
-  ctx.strokeStyle=side(p)==="r"?"#b32620":"#24201b";ctx.lineWidth=1.5;ctx.stroke();
-  ctx.fillStyle=side(p)==="r"?"#b32620":"#24201b";
-  ctx.font="bold 25px Arial";ctx.textAlign="center";ctx.textBaseline="middle";
-  ctx.fillText((side(p)==="r"?red:black)[type(p)],cx,cy+1);
+ if(lastMove){
+  ctx.fillStyle="#f2df7d77";
+  for(const [r,c] of [lastMove.from,lastMove.to]){
+   ctx.fillRect(X0+c*DX-19,Y0+r*DY-19,38,38);
+  }
  }
-}
-function begin(which){
- closeModals();startAudio();
- if(which==="two"){gameType="two";mode="two";$("redLabel").textContent="🔴 ĐỎ: Người chơi 2"}
- else{gameType="bot";mode=which;$("redLabel").textContent="🔴 ĐỎ: Bot"}
- screen("game");newGame();
-}
-function newGame(){
- board=initial();turn="b";selected=null;moves=[];history=[];
- lastMove=null;hintMove=null;finished=false;startTime=Date.now();
- $("result").classList.add("hidden");status("ĐEN đi trước");draw();
-}
-function finish(text){
- finished=true;$("resultText").textContent=text;$("result").classList.remove("hidden");status(text);effect(660);
-}
-function move(m){
- history.push({board:clone(board),turn,lastMove});
- let captured=board[m.ny][m.nx];
- board[m.ny][m.nx]=board[m.y][m.x];board[m.y][m.x]=null;
- lastMove=m;selected=null;moves=[];hintMove=null;turn=opponent(turn);
- draw();effect(captured?620:420);
- if(captured&&type(captured)==="K"){finish(captured[0]==="b"?"ĐỎ THẮNG!":"ĐEN THẮNG!");return}
- if(!allMoves(turn).length){finish(turn==="b"?"ĐỎ THẮNG!":"ĐEN THẮNG!");return}
- status("Đến lượt "+(turn==="b"?"ĐEN":"ĐỎ"));
- if(gameType==="bot"&&turn==="r")setTimeout(botMove,350);
-}
-function botMove(){
- if(finished||turn!=="r")return;
- let a=allMoves("r");if(!a.length){finish("ĐEN THẮNG!");return}
- function score(m){
-  let p=board[m.ny][m.nx],v=p?({K:1000,R:90,C:50,H:45,E:20,A:20,P:10}[type(p)]):0;
-  return v+(mode==="easy"?Math.random()*100:Math.random()*8);
+ if(hintMove){
+  ctx.strokeStyle="#267b39";ctx.lineWidth=5;
+  for(const [r,c] of [hintMove.from,hintMove.to]){
+   ctx.beginPath();ctx.arc(X0+c*DX,Y0+r*DY,27,0,Math.PI*2);ctx.stroke();
+  }
  }
- a.sort((x,y)=>score(y)-score(x));
- let m=mode==="easy"?a[Math.floor(Math.random()*a.length)]:a[0];
- move(m);
-}
-canvas.addEventListener("click",e=>{
- if(finished||(gameType==="bot"&&turn==="r"))return;
- startAudio();
- let r=canvas.getBoundingClientRect();
- let x=Math.round(((e.clientX-r.left)*680/r.width-L)/DX);
- let y=Math.round(((e.clientY-r.top)*760/r.height-T)/DY);
- if(!inside(y,x))return;
- if(selected&&moves.some(m=>m.ny===y&&m.nx===x)){
-  move(moves.find(m=>m.ny===y&&m.nx===x));return;
+ for(let r=0;r<10;r++)for(let c=0;c<9;c++){
+  const p=board[r][c];if(!p)continue;
+  const x=X0+c*DX,y=Y0+r*DY;
+  if(selected&&selected[0]===r&&selected[1]===c){
+   ctx.beginPath();ctx.arc(x,y,34,0,Math.PI*2);ctx.fillStyle="#f9e6a4";ctx.fill();
+  }
+  ctx.beginPath();ctx.arc(x,y,29,0,Math.PI*2);
+  ctx.fillStyle="#efd7a3";ctx.fill();
+  ctx.strokeStyle=p.s==="B"?"#25201a":"#9d3026";ctx.lineWidth=4;ctx.stroke();
+  ctx.beginPath();ctx.arc(x,y,24,0,Math.PI*2);
+  ctx.strokeStyle=p.s==="B"?"#4a3727":"#c45137";ctx.lineWidth=1;ctx.stroke();
+  ctx.fillStyle=p.s==="B"?"#25201a":"#a42f25";
+  ctx.font="bold 34px serif";ctx.textAlign="center";ctx.textBaseline="middle";
+  ctx.fillText(glyph[p.s+p.t],x,y+1);
  }
- if(board[y][x]&&side(board[y][x])===turn){
-  selected={y,x};moves=pseudo(y,x);draw();
- }else{selected=null;moves=[];draw()}
-});
-function undo(){
- if(!history.length||finished)return;
- let n=gameType==="bot"&&history.length>=2?2:1;
- while(n--&&history.length){let h=history.pop();board=h.board;turn=h.turn;lastMove=h.lastMove}
- selected=null;moves=[];hintMove=null;draw();status("Đã đi lại");
+ ctx.textBaseline="alphabetic";
 }
-function hint(){
- let a=allMoves(turn);if(!a.length)return;
- let m=a[Math.floor(Math.random()*a.length)];
- hintMove=m;draw();status("Gợi ý: viền xanh là nước đi tham khảo");
+function snapshot(){
+ history.push({board:cloneBoard(board),turn,mode,difficulty,lastMove});
+ if(history.length>80)history.shift();
 }
-function surrender(){if(!finished)finish(turn==="b"?"ĐỎ THẮNG!":"ĐEN THẮNG!")}
-function startAudio(){
+function playSound(freq=520,duration=.08){
+ if(!soundOn)return;
  try{
-  if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();
   if(audioCtx.state==="suspended")audioCtx.resume();
-  if(!$("music").checked||musicTimer)return;
-  let notes=[196,246.94,293.66,246.94,220,261.63];
-  let i=0;
-  musicTimer=setInterval(()=>{
-   if(!$("music").checked){clearInterval(musicTimer);musicTimer=null;return}
-   let o=audioCtx.createOscillator(),g=audioCtx.createGain();
-   o.type="triangle";o.frequency.value=notes[i++%notes.length];
-   g.gain.value=volume*.035;o.connect(g);g.connect(audioCtx.destination);
-   o.start();o.stop(audioCtx.currentTime+0.7);
-  },900);
- }catch(e){console.log(e)}
-}
-function effect(freq){
- if(!$("effects").checked)return;
- try{
-  startAudio();if(!audioCtx)return;
-  let o=audioCtx.createOscillator(),g=audioCtx.createGain();
-  o.frequency.value=freq;g.gain.value=volume*.12;
-  o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+.12);
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.type="sine";o.frequency.value=freq;
+  g.gain.value=volume*.12;o.connect(g);g.connect(audioCtx.destination);
+  o.start();g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);
+  o.stop(audioCtx.currentTime+duration);
  }catch(e){}
 }
-document.addEventListener("input",e=>{
- if(e.target.id==="volume")volume=Number(e.target.value)/100;
- if(e.target.id==="music"&&!e.target.checked&&musicTimer){clearInterval(musicTimer);musicTimer=null}
- if(e.target.id==="music"&&e.target.checked)startAudio();
-});
+function startMusic(){
+ stopMusic();
+ if(!musicOn)return;
+ try{
+  audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==="suspended")audioCtx.resume();
+  let notes=[196,246.94,293.66,246.94,220,293.66,329.63,293.66],i=0;
+  musicTimer=setInterval(()=>{
+   if(!musicOn)return;
+   const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+   o.type="triangle";o.frequency.value=notes[i++%notes.length];
+   g.gain.value=volume*.025;o.connect(g);g.connect(audioCtx.destination);
+   o.start();g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.65);
+   o.stop(audioCtx.currentTime+.7);
+  },700);
+ }catch(e){}
+}
+function stopMusic(){if(musicTimer){clearInterval(musicTimer);musicTimer=null}}
+function updateStatus(){
+ $("status").textContent=ended?"Ván đấu đã kết thúc":("Lượt quân "+(turn==="B"?"Đen":"Đỏ"));
+ $("blackPlayer").classList.toggle("active",turn==="B"&&!ended);
+ $("redPlayer").classList.toggle("active",turn==="R"&&!ended);
+}
+function begin(which,level="medium"){
+ mode=which;difficulty=level;board=initialBoard();turn="B";
+ selected=null;legal=[];history=[];ended=false;lastMove=null;hintMove=null;
+ startedAt=Date.now();elapsed=0;
+ $("home").style.display="none";$("game").style.display="block";
+ $("result").style.display="none";
+ $("modeTitle").textContent=which==="two"?"ĐẤU HAI NGƯỜI":"ĐẤU VỚI MÁY · "+difficultyNames[level].toUpperCase();
+ $("redDesc").textContent=which==="two"?"Người chơi 2":"Máy · "+difficultyNames[level];
+ $("blackDesc").textContent=which==="two"?"Người chơi 1 · đi trước":"Bạn · đi trước";
+ $("hintline").textContent="Chọn quân Đen, sau đó chọn vị trí muốn đi.";
+ closeModal();updateStatus();draw();playSound(420);startMusic();
+}
+function closeModal(){$("modal").style.display="none"}
+function showModal(kind){
+ const content=$("modalContent");content.innerHTML="";
+ $("modal").style.display="flex";
+ if(kind==="difficulty"){
+  $("modalTitle").textContent="CHỌN ĐỘ KHÓ";
+  const list=[
+   ["easy","DỄ","Dành cho người mới"],
+   ["medium","TRUNG BÌNH","Thử thách vừa phải"],
+   ["hard","KHÓ","Bot ưu tiên nước ăn quân"],
+   ["expert","SIÊU KHÓ","Bot chọn nước có điểm cao hơn"]
+  ];
+  list.forEach(([v,label,desc])=>{
+   const b=document.createElement("button");b.className="btn";b.innerHTML=label+"<br><small>"+desc+"</small>";
+   b.onclick=()=>begin("bot",v);content.appendChild(b);
+  });
+ }else if(kind==="settings"){
+  $("modalTitle").textContent="CÀI ĐẶT";
+  content.innerHTML=`
+   <div class="setting-row"><label for="music">Nhạc nền</label><input id="music" type="checkbox" ${musicOn?"checked":""}></div>
+   <div class="setting-row"><label for="sound">Âm thanh</label><input id="sound" type="checkbox" ${soundOn?"checked":""}></div>
+   <div class="setting-row"><label for="vol">Âm lượng</label><input id="vol" type="range" min="0" max="100" value="${Math.round(volume*100)}"></div>
+   <div class="setting-row"><label>Tiếp tục chơi</label><button class="small-btn" id="resume">Tiếp tục</button></div>
+   <div class="setting-row"><label>Về màn hình chính</label><button class="small-btn" id="gohome">Về trang chủ</button></div>`;
+  $("music").onchange=e=>{musicOn=e.target.checked;if(musicOn)startMusic();else stopMusic()};
+  $("sound").onchange=e=>soundOn=e.target.checked;
+  $("vol").oninput=e=>volume=Number(e.target.value)/100;
+  $("resume").onclick=closeModal;
+  $("gohome").onclick=()=>{closeModal();$("game").style.display="none";$("home").style.display="flex";$("result").style.display="none";stopMusic()};
+ }else if(kind==="rules"){
+  $("modalTitle").textContent="LUẬT CHƠI CƠ BẢN";
+  content.innerHTML=`
+   <p>• Đỏ đi trước theo luật truyền thống; trong phiên bản này, bạn cầm quân Đen và được đi trước.</p>
+   <p>• Chọn quân của mình rồi chọn điểm đến được đánh dấu.</p>
+   <p>• Xe đi thẳng; Mã đi chữ L; Tượng đi chéo hai điểm; Sĩ đi chéo một điểm.</p>
+   <p>• Pháo đi như Xe khi không ăn quân; khi ăn phải có đúng một quân chắn.</p>
+   <p>• Tốt đi thẳng về phía trước, qua sông mới được đi ngang.</p>
+   <p>• Bản hiện tại là phiên bản chơi thử: chưa kiểm tra đầy đủ chiếu tướng, tự chiếu và mọi luật kết thúc ván.</p>`;
+ }
+}
+function finish(title,text){
+ ended=true;selected=null;legal=[];hintMove=null;draw();updateStatus();
+ $("resultTitle").textContent=title;$("resultText").textContent=text;
+ $("result").style.display="flex";playSound(260,.3);
+}
+function move(from,to){
+ snapshot();
+ const p=board[from[0]][from[1]],captured=board[to[0]][to[1]];
+ board[to[0]][to[1]]=p;board[from[0]][from[1]]=null;
+ lastMove={from,to};selected=null;legal=[];hintMove=null;
+ playSound(captured?260:520);
+ if(captured&&captured.t==="K"){
+  draw();finish(p.s==="B"?"CHIẾN THẮNG":"THẤT BẠI",p.s==="B"?"Bạn đã ăn được Tướng đối phương!":"Tướng của bạn đã bị ăn.");
+  return;
+ }
+ turn=turn==="B"?"R":"B";updateStatus();draw();
+ $("hintline").textContent="Đã đi xong. Đến lượt quân "+(turn==="B"?"Đen":"Đỏ")+".";
+ if(mode==="bot"&&turn==="R"&&!ended)setTimeout(botMove,350);
+}
+function onBoardClick(e){
+ if(ended)return;
+ if(mode==="bot"&&turn==="R")return;
+ const rect=canvas.getBoundingClientRect();
+ const x=(e.clientX-rect.left)*canvas.width/rect.width;
+ const y=(e.clientY-rect.top)*canvas.height/rect.height;
+ const c=Math.round((x-X0)/DX),r=Math.round((y-Y0)/DY);
+ if(!inside(r,c)||Math.abs(x-(X0+c*DX))>DX*.48||Math.abs(y-(Y0+r*DY))>DY*.48)return;
+ const p=board[r][c];
+ if(selected&&legal.some(([rr,cc])=>rr===r&&cc===c)){
+  move(selected,[r,c]);return;
+ }
+ if(p&&p.s===turn){
+  selected=[r,c];legal=movesFor(r,c);hintMove=null;draw();playSound(620,.05);
+ }else{
+  selected=null;legal=[];draw();
+ }
+}
+function allMoves(s){
+ const out=[];
+ for(let r=0;r<10;r++)for(let c=0;c<9;c++){
+  if(board[r][c]?.s!==s)continue;
+  for(const [nr,nc] of movesFor(r,c))out.push({from:[r,c],to:[nr,nc],piece:board[r][c],capture:board[nr][nc]});
+ }
+ return out;
+}
+function pieceValue(p){
+ if(!p)return 0;
+ return ({K:10000,R:900,C:450,H:400,E:200,A:200,P:100})[p.t]||0;
+}
+function botMove(){
+ if(ended||mode!=="bot"||turn!=="R")return;
+ let candidates=allMoves("R");
+ if(!candidates.length){finish("CHIẾN THẮNG","Bot không còn nước đi theo bộ luật đơn giản này.");return}
+ candidates=candidates.map(m=>{
+  let score=Math.random()*20;
+  if(m.capture)score+=pieceValue(m.capture)*({easy:.25,medium:.6,hard:1,expert:1.25}[difficulty]);
+  if(m.piece.t==="P")score+=Math.random()*10;
+  if(difficulty==="easy")score+=Math.random()*160;
+  if(difficulty==="expert")score+=Math.random()*8;
+  return {...m,score};
+ }).sort((a,b)=>b.score-a.score);
+ let pool=difficulty==="easy"?candidates.slice(0,Math.min(8,candidates.length)):
+          difficulty==="medium"?candidates.slice(0,Math.min(4,candidates.length)):
+          difficulty==="hard"?candidates.slice(0,Math.min(2,candidates.length)):candidates.slice(0,1);
+ const m=pool[Math.floor(Math.random()*pool.length)];
+ move(m.from,m.to);
+}
+function undo(){
+ if(!history.length||ended)return;
+ if(mode==="bot"&&history.length>=2){
+  let snap=history[history.length-2];history=history.slice(0,-2);
+  board=cloneBoard(snap.board);turn=snap.turn;lastMove=snap.lastMove;
+ }else{
+  const snap=history.pop();board=cloneBoard(snap.board);turn=snap.turn;lastMove=snap.lastMove;
+ }
+ selected=null;legal=[];hintMove=null;updateStatus();draw();
+ $("hintline").textContent="Đã quay lại nước đi trước.";
+}
+function hint(){
+ if(ended)return;
+ const side=turn;
+ let moves=allMoves(side);
+ if(!moves.length){$("hintline").textContent="Chưa tìm được nước gợi ý.";return}
+ moves.sort((a,b)=>pieceValue(b.capture)-pieceValue(a.capture));
+ const m=moves[0];
+ hintMove={from:m.from,to:m.to};draw();
+ $("hintline").textContent="Gợi ý: thử đi quân ở hàng "+(m.from[0]+1)+", cột "+(m.from[1]+1)+".";
+}
+function newGame(){
+ $("result").style.display="none";
+ if(mode==="bot")begin("bot",difficulty);else begin("two");
+}
+function surrender(){
+ if(ended)return;
+ if(!confirm("Bạn muốn đầu hàng ván này?"))return;
+ finish(mode==="bot"?"THẤT BẠI":"KẾT THÚC VÁN",mode==="bot"?"Bạn đã đầu hàng.":"Ván đấu đã được kết thúc.");
+}
 document.addEventListener("click",e=>{
  const b=e.target.closest("button");if(!b)return;
- const action=b.dataset.action;
- if(action){
-  if(action==="difficulty")modal("difficulty");
-  else if(action==="settings"){modal("settings");startAudio()}
-  else if(action==="rules")modal("rules");
-  else if(action==="two")begin("two");
-  else if(action==="close")closeModals();
-  else if(action==="home"){closeModals();screen("home")}
-  else if(action==="new")newGame();
-  else if(action==="undo")undo();
-  else if(action==="hint")hint();
-  else if(action==="surrender")surrender();
- }
- if(b.dataset.mode)begin(b.dataset.mode);
+ const a=b.dataset.action;if(!a)return;
+ if(a==="difficulty")showModal("difficulty");
+ else if(a==="two")begin("two");
+ else if(a==="settings")showModal("settings");
+ else if(a==="rules")showModal("rules");
+ else if(a==="close")closeModal();
+ else if(a==="home"){closeModal();$("result").style.display="none";$("game").style.display="none";$("home").style.display="flex";stopMusic()}
+ else if(a==="new")newGame();
+ else if(a==="undo")undo();
+ else if(a==="hint")hint();
+ else if(a==="surrender")surrender();
 });
+canvas.addEventListener("click",onBoardClick);
+$("modal").addEventListener("click",e=>{if(e.target===$("modal"))closeModal()});
 setInterval(()=>{
- let n=Math.floor((Date.now()-startTime)/1000);
- $("clock").textContent=String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0");
+ if($("game").style.display!=="none"&&!ended){
+  elapsed=Math.floor((Date.now()-startedAt)/1000);
+  $("clock").textContent=String(Math.floor(elapsed/60)).padStart(2,"0")+":"+String(elapsed%60).padStart(2,"0");
+ }
 },1000);
-window.addEventListener("error",e=>{
- let s=$("status");if(s)s.textContent="Lỗi game: "+e.message;
-});
-board=initial();draw();
+draw();
 </script>
 </body>
-</html>'''
+</html>
+'''
 
-components.html(HTML, height=1000, scrolling=False)
-
+components.html(HTML, height=1050, scrolling=False)

@@ -215,6 +215,32 @@ function pseudo(b,y,x){
   }
  }else if(t==='R'||t==='C'){
   for(let [dy,dx] of [[1,0],[-1,0],[0,1],[0,-1]]){
+    let ny=y+dy;
+    let nx=x+dx;
+    let screen=false;
+
+    while(inside(ny,nx)){
+      if(!b[ny][nx]){
+        if(t==='R'||!screen){
+          add(ny,nx);
+        }
+      }else{
+        if(!screen){
+          if(t==='R') break;
+          screen=true;
+        }else{
+          if(side(b[ny][nx])!==s){
+            add(ny,nx);
+          }
+          break;
+        }
+      }
+
+      ny+=dy;
+      nx+=dx;
+    }
+  }
+  for(let [dy,dx] of [[1,0],[-1,0],[0,1],[0,-1]]){
    let ny=y+dy,nx=x+dx,screen=false;
    while(inside(ny,nx)){
     if(!b[ny][nx]){if(t==='R'||!screen)add(ny,nx)}

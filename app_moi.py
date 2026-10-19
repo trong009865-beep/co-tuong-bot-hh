@@ -17,112 +17,100 @@ HTML = r"""
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 *{box-sizing:border-box}
-:root{--gold:#e4bd72;--gold2:#f5dca1;--red:#8e252b}
-html,body{margin:0;padding:0;background:#160e0c;color:#f8ead0;
+:root{--gold:#e7c27b;--gold2:#f8e3b1;--red:#a52e31}
+html,body{margin:0;padding:0;background:#130c09;color:#f8ead0;
 font-family:Georgia,"Times New Roman",serif}
 button,select,input{font:inherit}
-button{cursor:pointer;transition:.2s}
-button:hover{filter:brightness(1.13);transform:translateY(-2px)}
-#app{min-height:950px;position:relative;overflow:hidden;
-background:radial-gradient(ellipse at 75% 35%,#51271c,#251510 45%,#100b09)}
-.topline{height:5px;background:linear-gradient(90deg,#5c171a,#f0ce85,#8d262a)}
-.home{min-height:950px;position:relative;display:flex;align-items:center;
-padding:55px 6%;overflow:hidden}
-.home-content{position:relative;z-index:4;width:48%;max-width:560px}
+button{cursor:pointer;transition:.18s}
+button:hover{filter:brightness(1.15);transform:translateY(-1px)}
+button:disabled{opacity:.5;cursor:not-allowed}
+#app{min-height:100vh;background:radial-gradient(ellipse at 75% 25%,#573020,#25140e 50%,#100a08)}
+.topline{height:5px;background:linear-gradient(90deg,#651619,#f4d48e,#7e2226)}
+.home{min-height:900px;position:relative;display:flex;align-items:center;
+padding:48px 6%;overflow:hidden}
+.home-content{position:relative;z-index:2;width:49%;max-width:570px}
 .brand{display:flex;align-items:center;gap:12px;color:var(--gold);
-font-size:14px;letter-spacing:4px;text-transform:uppercase}
-.brand-icon{border:1px solid #b38a4e;border-radius:50%;width:42px;height:42px;
-display:grid;place-items:center;font-size:23px}
-.eyebrow{font-size:13px;letter-spacing:4px;color:#d5aa65;margin:28px 0 12px}
-h1{font-size:clamp(48px,6vw,84px);line-height:1.03;margin:0;
-color:#f4d99d;font-weight:normal;text-shadow:0 4px 20px #000}
-h1 span{display:block;font-size:.52em;letter-spacing:9px;margin-top:18px}
-.intro{color:#d0bca2;font-family:Arial,sans-serif;line-height:1.9;
-max-width:420px;font-size:15px;margin:25px 0 30px}
-.hero-buttons{display:flex;flex-direction:column;gap:16px;
-width:min(350px,100%);margin-top:25px}
-.hero-buttons button{width:100%;min-height:66px;padding:17px 24px;
-font-size:19px;font-weight:bold;letter-spacing:1.5px;
-border:1px solid #d2ac6b;border-radius:10px;box-shadow:0 7px 20px #0007}
+font-size:14px;letter-spacing:4px}
+.brand-icon{border:1px solid #b38a4e;border-radius:50%;width:44px;height:44px;
+display:grid;place-items:center;font-size:23px;flex-shrink:0}
+.eyebrow{font-size:12px;letter-spacing:3px;color:#d5aa65;margin:28px 0 12px}
+h1{font-size:clamp(48px,6vw,82px);line-height:1.04;margin:0;color:#f4d99d;
+font-weight:normal;text-shadow:0 4px 20px #000}
+h1 span{display:block;font-size:.5em;letter-spacing:8px;margin-top:16px}
+.intro{color:#d0bca2;font:15px/1.9 Arial,sans-serif;max-width:430px;margin:25px 0}
+.hero-buttons{display:flex;flex-direction:column;gap:14px;width:min(360px,100%);margin-top:24px}
+.hero-buttons button{width:100%;min-height:64px;padding:16px 22px;font-size:18px;
+font-weight:bold;letter-spacing:1px;border:1px solid #d2ac6b;border-radius:9px;
+box-shadow:0 7px 20px #0007}
 .primary{background:linear-gradient(135deg,#b13b32,#65191c);color:#fff0d2}
 .secondary{background:#211510;color:#f0d29a}
-.home-foot{margin-top:35px;color:#92775b;font:11px Arial,sans-serif;letter-spacing:3px}
+.home-foot{margin-top:30px;color:#a38a6b;font:11px Arial,sans-serif;letter-spacing:3px}
 .board-showcase{position:absolute;right:4%;top:50%;transform:translateY(-50%);
 width:min(43vw,510px);filter:drop-shadow(0 25px 25px #000b)}
-.board-frame{padding:12px;background:linear-gradient(135deg,#98602e,#e2bb72,#63391d);
+.board-frame{padding:10px;background:linear-gradient(135deg,#98602e,#e2bb72,#63391d);
 border:2px solid #d5a858;box-shadow:inset 0 0 0 4px #563018}
-#decorBoard{display:block;width:100%;height:auto;background:#d8b578}
-.game{display:none;padding:24px 4% 40px;min-height:960px}
-.game-top{display:flex;align-items:center;justify-content:space-between;
-gap:12px;flex-wrap:wrap;margin-bottom:20px}
-.game-title{font-size:26px;color:var(--gold2)}
+canvas{display:block;width:100%;height:auto}
+#decorBoard{background:#d8b578}
+.game{display:none;padding:24px 4% 35px;min-height:900px}
+.game-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.game-title{font-size:25px;color:var(--gold2)}
 .small-btn{padding:11px 15px;border:1px solid #947044;border-radius:8px;
 color:#f5dfb2;background:#2c1b14;font-size:14px}
-.game-layout{display:grid;grid-template-columns:minmax(280px,650px) minmax(240px,1fr);
-gap:28px;align-items:start;max-width:1200px;margin:auto}
-.play-area{position:relative;padding:12px;background:linear-gradient(135deg,#a87339,#e5c580,#68401f);
+.game-layout{display:grid;grid-template-columns:minmax(0,650px) minmax(240px,1fr);
+gap:25px;align-items:start;max-width:1200px;margin:auto}
+.play-area{position:relative;width:100%;padding:10px;background:linear-gradient(135deg,#a87339,#e5c580,#68401f);
 border:2px solid #e1b66a;box-shadow:0 18px 40px #0009}
-#board{display:block;width:100%;height:auto;touch-action:manipulation}
-.game-side{background:#241713;border:1px solid #73502e;border-radius:12px;padding:22px}
-.game-side h2{font-size:23px;color:var(--gold2);font-weight:normal;margin:0 0 14px}
-.status{background:#160e0c;border:1px solid #503321;border-radius:8px;
-padding:14px;margin-bottom:15px;line-height:1.6;color:#ead6b5}
-.side-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.side-buttons button{padding:12px 8px;border:1px solid #89643a;border-radius:7px;
-background:#3a2419;color:#f4dfb7}
+#board{width:100%;height:auto;background:#d9b87c;touch-action:manipulation}
+.game-side{background:#241713;border:1px solid #73502e;border-radius:12px;padding:20px}
+.game-side h2{font-size:22px;color:var(--gold2);font-weight:normal;margin:0 0 14px}
+.status{background:#160e0c;border:1px solid #503321;border-radius:8px;padding:13px;
+margin-bottom:14px;line-height:1.6;color:#ead6b5;font:14px/1.7 Arial,sans-serif}
+.side-buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.side-buttons button{padding:12px 7px;border:1px solid #89643a;border-radius:7px;
+background:#3a2419;color:#f4dfb7;font-size:14px}
 .side-buttons .danger{background:#6e2021}
 .side-buttons .wide{grid-column:1/-1}
-.section-title{color:#dcb76e;font-size:13px;letter-spacing:2px;margin:24px 0 10px}
+.section-title{color:#dcb76e;font-size:12px;letter-spacing:2px;margin:22px 0 9px}
 .tip{color:#c8b59b;font:14px/1.8 Arial,sans-serif}
-.overlay{display:none;position:fixed;z-index:1000;inset:0;background:#080504df;
-align-items:center;justify-content:center;padding:18px}
+.overlay{display:none;position:fixed;z-index:1000;inset:0;background:#080504e8;
+align-items:center;justify-content:center;padding:15px}
 .overlay.show{display:flex}
 .modal{position:relative;width:min(540px,100%);max-height:90vh;overflow:auto;
-padding:28px;background:linear-gradient(145deg,#352017,#170e0c);
+padding:27px;background:linear-gradient(145deg,#352017,#170e0c);
 border:1px solid #c59a55;border-radius:14px;box-shadow:0 20px 80px #000}
-.modal h2{margin:0 0 20px;color:var(--gold2);font-size:28px;font-weight:normal}
-.modal p,.modal li{font:15px/1.8 Arial,sans-serif;color:#e1cdb0}
-.modal-buttons{display:grid;grid-template-columns:1fr;gap:12px}
-.modal-buttons button{min-height:54px;padding:13px;border:1px solid #c6a063;
+.modal h2{margin:0 0 17px;color:var(--gold2);font-size:27px;font-weight:normal;padding-right:25px}
+.modal p,.modal li{font:14px/1.8 Arial,sans-serif;color:#e1cdb0}
+.modal-buttons{display:grid;grid-template-columns:1fr;gap:11px}
+.modal-buttons button{min-height:52px;padding:12px;border:1px solid #c6a063;
 border-radius:8px;background:#42251a;color:#f7e4bd;font-size:16px}
-.modal-buttons button:hover{background:#6b3423;border-color:#edcf8c}
-.close{position:absolute;right:14px;top:10px;border:0;background:transparent;
-color:#d9c4a3;font-size:27px}
-.difficulty-card{display:grid;grid-template-columns:48px 1fr 20px;align-items:center;
-gap:12px;margin:10px 0;padding:14px;background:linear-gradient(120deg,#382117,#21130f);
-border:1px solid #76512e;border-radius:10px;color:#f5dfb2;cursor:pointer;transition:.2s}
-.difficulty-card:hover{border-color:#e4bd72;background:linear-gradient(120deg,#59301e,#2b1811);
-transform:translateX(4px)}
-.difficulty-icon{width:44px;height:44px;display:grid;place-items:center;
-border:1px solid #b68b4c;border-radius:50%;color:#edca83;font-size:25px}
+.close{position:absolute;right:13px;top:8px;border:0;background:transparent;color:#d9c4a3;font-size:28px}
+.difficulty-card{display:grid;grid-template-columns:45px 1fr 18px;align-items:center;gap:12px;
+margin:10px 0;padding:13px;background:linear-gradient(120deg,#382117,#21130f);
+border:1px solid #76512e;border-radius:10px;color:#f5dfb2;cursor:pointer}
+.difficulty-card:hover{border-color:#e4bd72;background:#4b291b}
+.difficulty-icon{width:42px;height:42px;display:grid;place-items:center;border:1px solid #b68b4c;
+border-radius:50%;color:#edca83;font-size:23px}
 .difficulty-card b{color:#f0d092;letter-spacing:1px}
 .difficulty-card p{margin:5px 0 0;color:#cbb49a;font:13px/1.6 Arial,sans-serif}
-.difficulty-card>span{color:#e4bd72;font-size:25px}
-.setting-row{display:flex;align-items:center;justify-content:space-between;
-gap:15px;padding:14px 0;border-bottom:1px solid #4b3022;font:15px Arial,sans-serif}
-.setting-row select{background:#160e0c;color:#f5dfb2;border:1px solid #96713d;
-border-radius:6px;padding:9px;max-width:55%}
-.setting-row input[type=range]{width:45%;accent-color:#d6a34f}
-.setting-row input[type=checkbox]{width:20px;height:20px;accent-color:#b38a4e}
-.result{display:none;position:absolute;inset:0;z-index:20;background:#100907df;
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px;
+padding:13px 0;border-bottom:1px solid #4b3022;font:14px Arial,sans-serif}
+.setting-row select{background:#160e0c;color:#f5dfb2;border:1px solid #96713d;border-radius:6px;padding:8px}
+.setting-row input[type=range]{width:43%;accent-color:#d6a34f}
+.setting-row input[type=checkbox]{width:19px;height:19px;accent-color:#b38a4e}
+.result{display:none;position:absolute;inset:0;z-index:20;background:#100907e8;
 align-items:center;justify-content:center;text-align:center}
 .result.show{display:flex}
-.result-box{padding:30px 18px}
-.result h2{font-size:clamp(38px,7vw,72px);color:#f6d783;
-text-shadow:0 5px 20px #000;margin:0 0 15px}
+.result-box{padding:20px}
+.result h2{font-size:clamp(36px,7vw,70px);color:#f6d783;text-shadow:0 5px 20px #000;margin:0 0 15px}
 .result p{font:16px Arial,sans-serif;color:#f4e2c5}
-.result button{margin:7px;padding:14px 20px;border:1px solid #e0bb70;
-border-radius:8px;background:#772326;color:#fff0ce}
+.result button{margin:6px;padding:13px 18px;border:1px solid #e0bb70;border-radius:8px;background:#772326;color:#fff0ce}
 @media(max-width:800px){
-.home{padding:35px 6%;min-height:1050px;display:block}
-.home-content{width:100%;max-width:none}
-.home .intro{max-width:380px}
-.board-showcase{position:relative;right:auto;top:auto;transform:none;
-width:min(80%,380px);margin:35px auto 0}
-.hero-buttons{width:min(360px,100%)}
-.hero-buttons button{min-height:62px;font-size:18px}
-.game-layout{grid-template-columns:1fr}
-.game-side{order:2}.game{padding:15px 3%}
+ .home{padding:35px 6%;min-height:unset;display:flex;flex-direction:column;align-items:stretch}
+ .home-content{width:100%;max-width:none}
+ .board-showcase{position:relative;right:auto;top:auto;transform:none;width:min(88%,390px);margin:35px auto 0}
+ .hero-buttons{width:min(390px,100%)}
+ .game-layout{grid-template-columns:minmax(0,1fr)}
+ .game-side{order:2}.game{padding:15px 3%}.game-title{font-size:20px}
 }
 </style>
 </head>
@@ -143,9 +131,7 @@ width:min(80%,380px);margin:35px auto 0}
   </div>
   <div class="home-foot">STRATEGY · PATIENCE · WISDOM</div>
  </div>
- <div class="board-showcase"><div class="board-frame">
-  <canvas id="decorBoard" width="450" height="500"></canvas>
- </div></div>
+ <div class="board-showcase"><div class="board-frame"><canvas id="decorBoard" width="450" height="500"></canvas></div></div>
 </section>
 
 <section class="game" id="game">
@@ -191,25 +177,13 @@ width:min(80%,380px);margin:35px auto 0}
    <button onclick="showDifficulties()" data-i18n="vsBot">♟ Đấu với máy</button>
    <button onclick="startGame('human',1)" data-i18n="vsHuman">♟ Đấu hai người</button>
   </div>
-  <div id="difficultyList" style="display:none;margin-top:22px">
-   <p style="color:#e4bd72;font-size:13px;letter-spacing:2px" data-i18n="chooseLevelTitle">CHỌN ĐỐI THỦ</p>
-   <p data-i18n="chooseLevel">Mỗi cấp độ có phong cách chơi riêng. Hãy chọn đối thủ phù hợp với bạn.</p>
-   <div class="difficulty-card" onclick="startGame('bot',1)">
-    <div class="difficulty-icon">♟</div><div><b data-i18n="easy">DỄ</b>
-    <p data-i18n="easyDesc">Phù hợp cho người mới tập chơi và làm quen luật cờ.</p></div><span>›</span>
-   </div>
-   <div class="difficulty-card" onclick="startGame('bot',2)">
-    <div class="difficulty-icon">⚔</div><div><b data-i18n="medium">TRUNG BÌNH</b>
-    <p data-i18n="mediumDesc">Đối thủ biết ưu tiên ăn quân và bảo vệ quân của mình.</p></div><span>›</span>
-   </div>
-   <div class="difficulty-card" onclick="startGame('bot',3)">
-    <div class="difficulty-icon">♜</div><div><b data-i18n="hard">KHÓ</b>
-    <p data-i18n="hardDesc">Dành cho người muốn thử khả năng tính toán chiến thuật.</p></div><span>›</span>
-   </div>
-   <div class="difficulty-card" onclick="startGame('bot',4)">
-    <div class="difficulty-icon">冠</div><div><b data-i18n="expert">SIÊU KHÓ</b>
-    <p data-i18n="expertDesc">Cấp độ thử thách cao nhất trong các chế độ hiện có.</p></div><span>›</span>
-   </div>
+  <div id="difficultyList" style="display:none;margin-top:20px">
+   <p style="color:#e4bd72;letter-spacing:2px" data-i18n="chooseLevelTitle">CHỌN ĐỐI THỦ</p>
+   <p data-i18n="chooseLevel">Chọn đối thủ phù hợp với bạn.</p>
+   <div class="difficulty-card" onclick="startGame('bot',1)"><div class="difficulty-icon">♟</div><div><b data-i18n="easy">DỄ</b><p data-i18n="easyDesc">Phù hợp cho người mới.</p></div><span>›</span></div>
+   <div class="difficulty-card" onclick="startGame('bot',2)"><div class="difficulty-icon">⚔</div><div><b data-i18n="medium">TRUNG BÌNH</b><p data-i18n="mediumDesc">Máy biết ưu tiên ăn quân.</p></div><span>›</span></div>
+   <div class="difficulty-card" onclick="startGame('bot',3)"><div class="difficulty-icon">♜</div><div><b data-i18n="hard">KHÓ</b><p data-i18n="hardDesc">Dành cho người thích chiến thuật.</p></div><span>›</span></div>
+   <div class="difficulty-card" onclick="startGame('bot',4)"><div class="difficulty-icon">冠</div><div><b data-i18n="expert">SIÊU KHÓ</b><p data-i18n="expertDesc">Mức thử thách cao nhất trong bản này.</p></div><span>›</span></div>
    <button class="small-btn" style="width:100%;margin-top:12px" onclick="backToModes()" data-i18n="back">← QUAY LẠI</button>
   </div>
  </div>
@@ -229,23 +203,13 @@ width:min(80%,380px);margin:35px auto 0}
   <button class="close" onclick="closeModal('settingsModal')">×</button>
   <h2 data-i18n="settingsTitle">Cài đặt trò chơi</h2>
   <div class="setting-row"><span data-i18n="language">Ngôn ngữ</span>
-   <select id="language" onchange="changeLanguage(this.value)">
-    <option value="vi">Tiếng Việt</option><option value="en">English</option>
-   </select>
+   <select id="language" onchange="changeLanguage(this.value)"><option value="vi">Tiếng Việt</option><option value="en">English</option></select>
   </div>
-  <div class="setting-row"><span data-i18n="soundEffects">Hiệu ứng âm thanh</span>
-   <input id="soundToggle" type="checkbox" checked onchange="settings.sound=this.checked">
-  </div>
-  <div class="setting-row"><span data-i18n="soundVolume">Âm lượng hiệu ứng</span>
-   <input id="soundVolume" type="range" min="0" max="100" value="55" oninput="settings.volume=this.value/100">
-  </div>
-  <div class="setting-row"><span data-i18n="music">Nhạc nền</span>
-   <input id="musicToggle" type="checkbox" onchange="toggleMusic(this.checked)">
-  </div>
-  <div class="setting-row"><span data-i18n="musicVolume">Âm lượng nhạc nền</span>
-   <input id="musicVolume" type="range" min="0" max="100" value="18" oninput="settings.musicVolume=this.value/100;updateMusicVolume()">
-  </div>
-  <p class="tip" data-i18n="musicNote">Nhạc nền bắt đầu phát sau khi bạn bật nhạc và tương tác với trang.</p>
+  <div class="setting-row"><span data-i18n="soundEffects">Hiệu ứng âm thanh</span><input id="soundToggle" type="checkbox" checked onchange="settings.sound=this.checked"></div>
+  <div class="setting-row"><span data-i18n="soundVolume">Âm lượng hiệu ứng</span><input id="soundVolume" type="range" min="0" max="100" value="55" oninput="settings.volume=this.value/100"></div>
+  <div class="setting-row"><span data-i18n="music">Nhạc nền</span><input id="musicToggle" type="checkbox" onchange="toggleMusic(this.checked)"></div>
+  <div class="setting-row"><span data-i18n="musicVolume">Âm lượng nhạc nền</span><input id="musicVolume" type="range" min="0" max="100" value="18" oninput="settings.musicVolume=this.value/100;updateMusicVolume()"></div>
+  <p class="tip" data-i18n="musicNote">Nhạc nền bắt đầu sau khi bạn bật nhạc và tương tác với trang.</p>
   <div class="modal-buttons"><button onclick="closeModal('settingsModal')" data-i18n="save">Hoàn tất</button></div>
  </div>
 </div>
@@ -257,25 +221,22 @@ vi:{
 eyebrow:"NGHỆ THUẬT CỦA CHIẾN THUẬT",title:"CỜ TƯỚNG",
 intro:"Một bàn cờ, hai chiến tuyến. Rèn luyện tư duy, tính toán từng nước đi và bảo vệ Tướng của bạn.",
 start:"♟  BẮT ĐẦU",help:"📖  HƯỚNG DẪN",settings:"⚙  CÀI ĐẶT",
-gameTitle:"BÀN CỜ TƯỚNG",again:"Chơi lại",home:"⌂ Về sảnh chính",
-matchInfo:"Thông tin ván đấu",hint:"💡 Gợi ý",undo:"↶ Đi lại",restart:"⟳ Ván mới",
-resign:"Đầu hàng",tools:"CÔNG CỤ",toolTip:"Gợi ý đánh dấu một nước tham khảo. Đi lại hoàn tác nước đi gần nhất. Ván mới bắt đầu lại.",
+gameTitle:"BÀN CỜ TƯỚNG",again:"Chơi lại",home:"⌂ Về sảnh chính",matchInfo:"Thông tin ván đấu",
+hint:"💡 Gợi ý",undo:"↶ Đi lại",restart:"⟳ Ván mới",resign:"Đầu hàng",tools:"CÔNG CỤ",
+toolTip:"Gợi ý đánh dấu một nước tham khảo. Đi lại hoàn tác nước đi gần nhất. Ván mới bắt đầu lại.",
 quickRules:"NHẮC NHANH LUẬT CHƠI",quickTip:"Mục tiêu là chiếu bí Tướng đối phương. Không được để Tướng mình bị chiếu. Pháo cần một quân làm ngòi khi ăn.",
-chooseMode:"Chọn chế độ chơi",modeIntro:"Chọn cách chơi phù hợp với bạn.",
-vsBot:"♟ Đấu với máy",vsHuman:"♟ Đấu hai người",chooseLevelTitle:"CHỌN ĐỐI THỦ",
-chooseLevel:"Mỗi cấp độ có phong cách chơi riêng. Hãy chọn đối thủ phù hợp với bạn.",
+chooseMode:"Chọn chế độ chơi",modeIntro:"Chọn cách chơi phù hợp với bạn.",vsBot:"♟ Đấu với máy",vsHuman:"♟ Đấu hai người",
+chooseLevelTitle:"CHỌN ĐỐI THỦ",chooseLevel:"Mỗi cấp độ có phong cách chơi riêng. Hãy chọn đối thủ phù hợp với bạn.",
 easy:"DỄ",medium:"TRUNG BÌNH",hard:"KHÓ",expert:"SIÊU KHÓ",
 easyDesc:"Phù hợp cho người mới tập chơi và làm quen luật cờ.",
-mediumDesc:"Đối thủ biết ưu tiên ăn quân và bảo vệ quân của mình.",
+mediumDesc:"Máy ưu tiên ăn quân và bảo vệ quân của mình.",
 hardDesc:"Dành cho người muốn thử khả năng tính toán chiến thuật.",
-expertDesc:"Cấp độ thử thách cao nhất trong các chế độ hiện có.",back:"← QUAY LẠI",
+expertDesc:"Cấp độ thử thách cao nhất trong bản game này.",back:"← QUAY LẠI",
 guideTitle:"Hướng dẫn chơi cờ tướng",gotIt:"Đã hiểu",settingsTitle:"Cài đặt trò chơi",
-language:"Ngôn ngữ",soundEffects:"Hiệu ứng âm thanh",soundVolume:"Âm lượng hiệu ứng",
-music:"Nhạc nền",musicVolume:"Âm lượng nhạc nền",
-musicNote:"Nhạc nền bắt đầu phát sau khi bạn bật nhạc và tương tác với trang. Trình duyệt có thể chặn tự động phát.",
-save:"Hoàn tất",redTurn:"Đến lượt Đỏ.",blackTurn:"Đến lượt Đen.",
-selectPiece:"Chọn một quân cờ.",botThinking:"Máy đang suy nghĩ…",check:"Chiếu Tướng!",
-redWins:"ĐỎ CHIẾN THẮNG!",blackWins:"ĐEN CHIẾN THẮNG!",
+language:"Ngôn ngữ",soundEffects:"Hiệu ứng âm thanh",soundVolume:"Âm lượng hiệu ứng",music:"Nhạc nền",
+musicVolume:"Âm lượng nhạc nền",musicNote:"Nhạc nền bắt đầu phát sau khi bạn bật nhạc và tương tác với trang.",
+save:"Hoàn tất",redTurn:"Đến lượt Đỏ.",blackTurn:"Đến lượt Đen.",selectPiece:"Chọn một quân cờ.",
+botThinking:"Máy đang suy nghĩ…",check:"Chiếu Tướng!",redWins:"ĐỎ CHIẾN THẮNG!",blackWins:"ĐEN CHIẾN THẮNG!",
 guide:`<p><b>1. Mục tiêu</b><br>Chiếu bí Tướng đối phương để đối thủ không còn nước đi hợp lệ.</p>
 <p><b>2. Cách đi quân</b></p><ul>
 <li><b>Tướng:</b> đi ngang hoặc dọc một ô trong cung 3×3.</li>
@@ -285,47 +246,37 @@ guide:`<p><b>1. Mục tiêu</b><br>Chiếu bí Tướng đối phương để đ
 <li><b>Pháo:</b> đi như Xe; khi ăn quân phải nhảy qua đúng một quân làm ngòi.</li>
 <li><b>Mã:</b> đi kiểu chữ L; chân Mã không được bị cản.</li>
 <li><b>Tốt:</b> đi thẳng một ô; qua sông được đi ngang, không đi lùi.</li></ul>
-<p><b>3. Cách thao tác</b><br>Nhấp vào quân của mình rồi nhấp ô muốn đi. Nước đi không hợp lệ sẽ bị từ chối.</p>
+<p><b>3. Cách thao tác</b><br>Nhấp quân của mình rồi nhấp ô muốn đi.</p>
 <p><b>4. Công cụ</b><br>Gợi ý đánh dấu nước tham khảo; Đi lại hoàn tác nước trước; Ván mới khởi động lại; Đầu hàng kết thúc ván.</p>
 <p><b>5. Mẹo chơi</b><br>Bảo vệ Tướng, phát triển Xe và Mã, chú ý quân bị tấn công và tránh để hai Tướng đối mặt trên cùng cột.</p>`
 },
 en:{
 eyebrow:"THE ART OF STRATEGY",title:"XIANGQI",
 intro:"One board, two sides. Train your mind, plan each move, and protect your General.",
-start:"♟  PLAY",help:"📖  HOW TO PLAY",settings:"⚙  SETTINGS",
-gameTitle:"XIANGQI BOARD",again:"Play again",home:"⌂ Main menu",
-matchInfo:"Game information",hint:"💡 Hint",undo:"↶ Undo",restart:"⟳ New game",
-resign:"Resign",tools:"TOOLS",toolTip:"Hint marks a suggested move. Undo reverses the last move. New game restarts.",
-quickRules:"QUICK RULES",quickTip:"Checkmate the enemy General. Do not leave your General in check. A Cannon needs one screen to capture.",
-chooseMode:"Choose a game mode",modeIntro:"Choose how you want to play.",
-vsBot:"♟ Play against computer",vsHuman:"♟ Two players",chooseLevelTitle:"CHOOSE YOUR OPPONENT",
-chooseLevel:"Each level offers a different challenge. Choose your opponent.",
-easy:"EASY",medium:"MEDIUM",hard:"HARD",expert:"VERY HARD",
-easyDesc:"For new players learning the rules.",
-mediumDesc:"The computer tries to capture and protect pieces.",
-hardDesc:"For players who want a tactical challenge.",
-expertDesc:"The toughest level available in this version.",back:"← BACK",
-guideTitle:"How to play Xiangqi",gotIt:"Got it",settingsTitle:"Game settings",
-language:"Language",soundEffects:"Sound effects",soundVolume:"Effects volume",
-music:"Background music",musicVolume:"Music volume",
-musicNote:"Music starts after you enable it and interact with the page. Your browser may block autoplay.",
-save:"Done",redTurn:"Red to move.",blackTurn:"Black to move.",
-selectPiece:"Select a piece.",botThinking:"Computer is thinking…",check:"Check!",
-redWins:"RED WINS!",blackWins:"BLACK WINS!",
-guide:`<p><b>1. Goal</b><br>Checkmate the enemy General so it has no legal escape.</p>
-<p><b>2. Pieces</b></p><ul>
-<li><b>General:</b> one orthogonal square inside the palace.</li>
-<li><b>Advisor:</b> one diagonal square inside the palace.</li>
+start:"♟  PLAY",help:"📖  HOW TO PLAY",settings:"⚙  SETTINGS",gameTitle:"XIANGQI BOARD",
+again:"Play again",home:"⌂ Main menu",matchInfo:"Game information",hint:"💡 Hint",undo:"↶ Undo",
+restart:"⟳ New game",resign:"Resign",tools:"TOOLS",toolTip:"Hint marks a suggested move. Undo reverses the last move. New game restarts.",
+quickRules:"QUICK RULES",quickTip:"Checkmate the enemy General. A Cannon needs one screen to capture.",
+chooseMode:"Choose a game mode",modeIntro:"Choose how you want to play.",vsBot:"♟ Play against computer",
+vsHuman:"♟ Two players",chooseLevelTitle:"CHOOSE YOUR OPPONENT",chooseLevel:"Choose your opponent.",
+easy:"EASY",medium:"MEDIUM",hard:"HARD",expert:"VERY HARD",easyDesc:"For new players learning the rules.",
+mediumDesc:"The computer tries to capture and protect pieces.",hardDesc:"For players who want a tactical challenge.",
+expertDesc:"The toughest level in this version.",back:"← BACK",guideTitle:"How to play Xiangqi",gotIt:"Got it",
+settingsTitle:"Game settings",language:"Language",soundEffects:"Sound effects",soundVolume:"Effects volume",
+music:"Background music",musicVolume:"Music volume",musicNote:"Music starts after you enable it and interact with the page.",
+save:"Done",redTurn:"Red to move.",blackTurn:"Black to move.",selectPiece:"Select a piece.",
+botThinking:"Computer is thinking…",check:"Check!",redWins:"RED WINS!",blackWins:"BLACK WINS!",
+guide:`<p><b>1. Goal</b><br>Checkmate the enemy General so it has no legal escape.</p><p><b>2. Pieces</b></p><ul>
+<li><b>General:</b> one orthogonal square inside the palace.</li><li><b>Advisor:</b> one diagonal square inside the palace.</li>
 <li><b>Elephant:</b> two diagonal squares; cannot cross the river or jump a blocked eye.</li>
 <li><b>Chariot:</b> any number of empty squares horizontally or vertically.</li>
 <li><b>Cannon:</b> moves like a Chariot, but needs one screen to capture.</li>
 <li><b>Horse:</b> moves in an L shape; its leg must be clear.</li>
 <li><b>Soldier:</b> moves forward; after crossing the river it may move sideways, never backward.</li></ul>
-<p><b>3. Controls</b><br>Click your piece, then the destination square. Illegal moves are rejected.</p>
-<p><b>4. Tools</b><br>Hint suggests a move; Undo reverses the last move; New game restarts; Resign ends the game.</p>
-<p><b>5. Tips</b><br>Protect your General, develop your Chariots and Horses, and watch for attacked pieces.</p>`
+<p><b>3. Controls</b><br>Click your piece, then the destination square.</p><p><b>4. Tips</b><br>Protect your General and watch for attacked pieces.</p>`
 }
 };
+
 let lang="vi";
 let settings={sound:true,volume:.55,musicVolume:.18};
 let audioCtx=null,musicTimer=null,musicOn=false,musicOsc=[];
@@ -335,8 +286,7 @@ function changeLanguage(v){
  document.querySelectorAll("[data-i18n]").forEach(el=>{
   const k=el.getAttribute("data-i18n");if(T[lang][k])el.textContent=T[lang][k];
  });
- $("guideContent").innerHTML=tr("guide");
- updateStatus();
+ $("guideContent").innerHTML=tr("guide");updateStatus();drawBoardCanvas($("decorBoard"),true);drawBoard();
 }
 function openModal(id){$(id).classList.add("show")}
 function closeModal(id){$(id).classList.remove("show")}
@@ -361,7 +311,8 @@ function updateMusicVolume(){
  musicOsc.forEach(x=>{try{x.gain.gain.value=settings.musicVolume*.025}catch(e){}});
 }
 function toggleMusic(on){
- musicOn=on;ensureAudio();
+ musicOn=on;
+ try{ensureAudio()}catch(e){return}
  if(musicTimer){clearInterval(musicTimer);musicTimer=null}
  musicOsc.forEach(x=>{try{x.osc.stop()}catch(e){}});
  musicOsc=[];
@@ -372,8 +323,7 @@ function toggleMusic(on){
   try{
    const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
    osc.type="sine";osc.frequency.value=notes[i++%notes.length];
-   gain.gain.value=settings.musicVolume*.025;
-   osc.connect(gain);gain.connect(audioCtx.destination);
+   gain.gain.value=settings.musicVolume*.025;osc.connect(gain);gain.connect(audioCtx.destination);
    osc.start();gain.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+1.5);
    osc.stop(audioCtx.currentTime+1.6);musicOsc.push({osc,gain});
    if(musicOsc.length>20)musicOsc.shift();
@@ -381,6 +331,7 @@ function toggleMusic(on){
  }
  playNote();musicTimer=setInterval(playNote,1300);
 }
+
 const initial=[
  ["r","h","e","a","k","a","e","h","r"],
  [null,null,null,null,null,null,null,null,null],
@@ -401,10 +352,6 @@ function side(p){return p===null?null:(p===p.toUpperCase()?"R":"B")}
 function inside(r,c){return r>=0&&r<10&&c>=0&&c<9}
 function palace(s,r,c){return c>=3&&c<=5&&(s==="R"?r>=7&&r<=9:r>=0&&r<=2)}
 function riverCrossed(s,r){return s==="R"?r<=4:r>=5}
-function clearPath(r,c,nr,nc){
- const dr=Math.sign(nr-r),dc=Math.sign(nc-c);let x=r+dr,y=c+dc,count=0;
- while(x!==nr||y!==nc){if(board[x][y])count++;x+=dr;y+=dc}return count;
-}
 function pseudoMoves(r,c){
  const p=board[r][c];if(!p)return [];
  const s=side(p),t=p.toLowerCase(),out=[];
@@ -459,7 +406,8 @@ function findGeneral(s){
 }
 function isAttacked(r,c,by){
  for(let y=0;y<10;y++)for(let x=0;x<9;x++){
-  const p=board[y][x];if(p&&side(p)===by&&pseudoMoves(y,x).some(([nr,nc])=>nr===r&&nc===c))return true;
+  const p=board[y][x];
+  if(p&&side(p)===by&&pseudoMoves(y,x).some(([nr,nc])=>nr===r&&nc===c))return true;
  }return false;
 }
 function inCheck(s){
@@ -487,20 +435,21 @@ function newGame(){
  $("result").classList.remove("show");updateStatus();drawBoard();beep(330,.1);
 }
 function startGame(m,l){
- mode=m;level=l;newGame();$("home").style.display="none";
- $("game").style.display="block";closeModal("modeModal");drawBoard();
+ mode=m;level=l;newGame();$("home").style.display="none";$("game").style.display="block";
+ closeModal("modeModal");drawBoard();
 }
 function goHome(){
  $("game").style.display="none";$("home").style.display="flex";
  closeModal("settingsModal");closeModal("helpModal");closeModal("modeModal");
 }
 function updateStatus(){
- if(!ended)$("status").textContent=(turn==="R"?tr("redTurn"):tr("blackTurn"))+" "+tr("selectPiece");
+ if(!ended&&!botBusy)$("status").textContent=(turn==="R"?tr("redTurn"):tr("blackTurn"))+" "+tr("selectPiece");
 }
 function makeMove(m){
  if(ended)return;
  history.push({board:cloneBoard(),turn,lastMove:lastMove?{...lastMove}:null});
- const captured=board[m.nr][m.nc];board[m.nr][m.nc]=board[m.r][m.c];board[m.r][m.c]=null;
+ const captured=board[m.nr][m.nc];
+ board[m.nr][m.nc]=board[m.r][m.c];board[m.r][m.c]=null;
  lastMove={r:m.r,c:m.c,nr:m.nr,nc:m.nc};selected=null;legal=[];hint=null;
  beep(captured?680:430,.08,captured?"triangle":"sine");
  turn=turn==="R"?"B":"R";
@@ -516,7 +465,8 @@ function makeMove(m){
 function finish(winner){
  ended=true;botBusy=false;
  $("resultTitle").textContent=winner==="R"?tr("redWins"):tr("blackWins");
- $("resultText").textContent="";$("result").classList.add("show");drawBoard();beep(740,.25,"triangle");
+ $("resultText").textContent="";
+ $("result").classList.add("show");drawBoard();beep(740,.25,"triangle");
 }
 function resign(){
  if(ended)return;
@@ -536,9 +486,10 @@ function hintMove(){
  if(ended||botBusy)return;
  const moves=allMoves(turn);if(!moves.length)return;
  let best=moves[0],bestScore=-9999;
+ const value={k:10000,r:9,c:5,h:4,e:2,a:2,s:1};
  moves.forEach(m=>{
   let score=Math.random()*2;const target=board[m.nr][m.nc];
-  if(target)score+=({k:1000,r:9,c:5,h:4,e:2,a:2,s:1})[target.toLowerCase()]||0;
+  if(target)score+=(value[target.toLowerCase()]||0);
   if(target&&target.toLowerCase()==="k")score+=10000;
   if(score>bestScore){bestScore=score;best=m}
  });
@@ -551,7 +502,7 @@ function botMove(){
  const moves=allMoves("B");if(!moves.length){finish("R");return}
  const value={k:10000,r:900,c:450,h:400,e:200,a:200,s:100};
  function scoreMove(m){
-  const target=board[m.nr][m.nc];let score=Math.random()*25;
+  const target=board[m.nr][m.nc];let score=Math.random()*20;
   if(target)score+=(value[target.toLowerCase()]||0)*1.5;
   const p=board[m.r][m.c];board[m.nr][m.nc]=p;board[m.r][m.c]=null;
   if(inCheck("B"))score-=1000;
@@ -666,4 +617,4 @@ init();
 </html>
 """
 
-components.html(HTML, height=1150, scrolling=True)
+components.html(HTML, height=1500, scrolling=True)

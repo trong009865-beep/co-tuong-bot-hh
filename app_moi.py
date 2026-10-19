@@ -11,10 +11,10 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-#MainMenu,footer,header,[data-testid="stToolbar"],
-[data-testid="stDecoration"]{display:none!important}
-.block-container{padding:0!important;max-width:100%!important}
-iframe{border:0!important}
+#MainMenu, footer, header, [data-testid="stToolbar"],
+[data-testid="stDecoration"] {display:none!important}
+.block-container {padding:0!important;max-width:100%!important}
+iframe {border:0!important;display:block}
 </style>
 """, unsafe_allow_html=True)
 
@@ -26,108 +26,105 @@ HTML = r"""
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 *{box-sizing:border-box}
-:root{--gold:#e8c47b;--cream:#fff0ce;--red:#8e3021;--dark:#21100d}
-body{margin:0;background:#1a0c09;color:var(--cream);
+:root{--gold:#e8c47b;--cream:#fff0ce}
+html,body{margin:0;width:100%;min-height:100%;background:#190b08;color:var(--cream);
 font-family:Georgia,"Noto Serif",serif}
-button,select,input{font:inherit}
-button{cursor:pointer;transition:filter .2s,transform .2s}
-button:hover{filter:brightness(1.17)}
+body{overflow-x:hidden}
+button,input,select{font:inherit}
+button{cursor:pointer;transition:filter .15s,transform .15s}
+button:hover{filter:brightness(1.15)}
 button:active{transform:scale(.98)}
 .hidden{display:none!important}
-.page{max-width:1100px;margin:auto;padding:16px}
-.panel{border:1px solid #b88745;border-radius:18px;
-background:linear-gradient(145deg,#452219,#25120e);
-box-shadow:0 12px 36px #0008;padding:20px}
-.hero{position:relative;overflow:hidden;min-height:610px;
-border:2px solid #c79b52;border-radius:16px;
-display:flex;align-items:center;justify-content:center;
-text-align:center;padding:25px;
+.page{width:100%;max-width:1100px;margin:auto;padding:8px}
+.panel{background:linear-gradient(145deg,#482419,#24110d);
+border:1px solid #b88745;border-radius:15px;padding:12px}
+.hero{position:relative;isolation:isolate;overflow:hidden;
+height:calc(100svh - 16px);min-height:500px;max-height:820px;
+border:2px solid #c79b52;border-radius:13px;
+display:flex;align-items:center;justify-content:center;text-align:center;
 background:
-radial-gradient(ellipse at 50% 44%,#6f391f55,transparent 55%),
-linear-gradient(90deg,#1a0908dc,#35160cc9 45%,#1b0909dc),
-repeating-linear-gradient(90deg,#63321c 0,#63321c 2px,#482315 3px,#32170f 12px);
-}
-.hero:before{content:"";position:absolute;inset:15px;
-border:1px solid #d1a15b66;pointer-events:none}
-.decor-board{position:absolute;width:min(78%,670px);height:330px;
-bottom:22px;left:50%;transform:translateX(-50%) perspective(650px) rotateX(13deg);
-border:9px solid #67371c;border-radius:4px;
-background:
-linear-gradient(#9d6839aa,#c08b4c88),
-repeating-linear-gradient(0deg,transparent 0 32px,#482a18 33px 34px),
-repeating-linear-gradient(90deg,transparent 0 32px,#482a18 33px 34px);
-box-shadow:0 18px 30px #0009;opacity:.72}
-.decor-board:after{content:"帥 仕 相 傌 俥 炮 兵　　將 士 象 馬 車 砲 卒";
-position:absolute;left:0;right:0;bottom:26px;text-align:center;
-font-size:clamp(13px,2vw,23px);color:#5c1e16;
-text-shadow:1px 1px #f0c984;word-spacing:8px}
-.hero-content{position:relative;z-index:2;width:min(100%,680px);
-margin-top:-75px;text-shadow:0 3px 10px #000}
-.lanterns{font-size:31px;letter-spacing:12px}
-h1{font-size:clamp(42px,8vw,76px);letter-spacing:5px;
-color:#f4d38a;margin:12px 0 5px;
-text-shadow:0 2px 0 #7b461d,0 5px 16px #000}
-.subtitle{color:#f3d9a9;font-size:17px;margin:8px 0 25px}
+radial-gradient(ellipse at 50% 45%,#8c4c2866,transparent 57%),
+linear-gradient(90deg,#190908ed,#35180ed1 50%,#1b0909ed),
+repeating-linear-gradient(90deg,#62351e 0,#62351e 2px,#482315 3px,#32170f 12px)}
+.hero:before{content:"";position:absolute;inset:12px;border:1px solid #d1a15b66;pointer-events:none}
+.decor-board{position:absolute;z-index:-1;width:min(80%,660px);height:36%;
+bottom:5%;left:50%;transform:translateX(-50%) perspective(650px) rotateX(12deg);
+border:8px solid #67371c;border-radius:4px;
+background:linear-gradient(#b37a4080,#c08b4c88),
+repeating-linear-gradient(0deg,transparent 0 30px,#482a18 31px 32px),
+repeating-linear-gradient(90deg,transparent 0 30px,#482a18 31px 32px);
+box-shadow:0 18px 30px #0009;opacity:.8}
+.decor-board:after{content:"帥　仕　相　傌　俥　炮　兵　　將　士　象　馬　車　砲　卒";
+position:absolute;left:0;right:0;bottom:15px;text-align:center;
+font-size:clamp(10px,2vw,22px);color:#542018;text-shadow:1px 1px #f0c984}
+.hero-content{position:relative;z-index:2;width:min(100%,650px);margin-top:-8%}
+.lanterns{font-size:28px;letter-spacing:8px}
+h1{font-size:clamp(40px,7vw,72px);letter-spacing:4px;color:#f4d38a;
+margin:10px 0;text-shadow:0 2px #7b461d,0 5px 16px #000}
+.subtitle{color:#f3d9a9;font-size:16px;margin:8px 0 20px}
 .modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
-gap:11px;width:min(100%,480px);margin:20px auto}
-.btn{width:100%;border:1px solid #e3bd76;border-radius:9px;
-padding:13px 10px;background:linear-gradient(#9c4b2b,#65271c);
-color:#fff0d1;font-weight:bold;font-size:16px;
-box-shadow:0 4px 9px #0005}
+gap:10px;width:min(100%,440px);margin:18px auto}
+.btn{width:100%;border:1px solid #e3bd76;border-radius:9px;padding:12px 9px;
+background:linear-gradient(#9c4b2b,#65271c);color:#fff0d1;font-weight:bold;
+font-size:15px;box-shadow:0 4px 9px #0005}
 .btn.gold{background:linear-gradient(#f0d391,#b77c35);color:#32170e}
-.btn.dark{background:#301914eF}
-.btn.small{font-size:14px;padding:10px}
-.screen-title{text-align:center;color:#f1ce83;letter-spacing:2px}
-.backline{max-width:480px;margin:12px auto}
-.gamebar{display:flex;align-items:center;justify-content:space-between;
-gap:8px;flex-wrap:wrap;margin-bottom:10px}
-.pill{background:#29150f;border:1px solid #986a37;border-radius:9px;
-padding:9px 12px;color:#f5d79b}
-.board-wrap{position:relative;width:min(100%,680px);margin:0 auto}
-#board{display:block;width:100%;height:auto;border:1px solid #c49450;
-border-radius:6px;box-shadow:0 10px 28px #0008;touch-action:manipulation}
-.status{text-align:center;color:#f4d18b;padding:9px;font-size:17px}
-.tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
-gap:9px;margin:15px auto 5px}
-.tool{border:1px solid #9c7545;border-radius:9px;background:#321b14;
-color:#ffe6b5;padding:13px 5px;font-size:15px}
-.note{text-align:center;color:#c9a77e;font-size:12px;line-height:1.6}
-.overlay{position:absolute;inset:0;z-index:5;
-display:flex;align-items:center;justify-content:center;
-padding:18px;text-align:center;background:#160805eF;
-border:2px solid var(--gold);border-radius:6px}
-.dialog{width:min(100%,430px);padding:22px;
-border:1px solid #c99c56;border-radius:15px;
+.btn.dark{background:#301914;color:#ffe6b5}
+.btn.small{font-size:13px;padding:8px 10px;width:auto}
+.gamebar{display:flex;align-items:center;justify-content:space-between;gap:7px;flex-wrap:wrap}
+.pill{background:#29150f;border:1px solid #986a37;border-radius:8px;padding:7px 10px;color:#f5d79b;font-size:13px}
+.status{text-align:center;color:#f4d18b;padding:5px;font-size:15px}
+.board-wrap{position:relative;width:min(100%,calc((100svh - 185px)*.895),620px);margin:0 auto}
+#board{display:block;width:100%;height:auto;border:1px solid #c49450;border-radius:5px;box-shadow:0 8px 22px #0008;touch-action:manipulation}
+.tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:8px auto 3px}
+.tool{border:1px solid #9c7545;border-radius:8px;background:#321b14;color:#ffe6b5;padding:9px 3px;font-size:13px}
+.note{text-align:center;color:#c9a77e;font-size:11px;margin:4px 0}
+.overlay{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;
+justify-content:center;padding:14px;background:#0c0505cc;backdrop-filter:blur(5px);
+overflow:auto}
+.dialog{width:min(100%,410px);max-height:calc(100svh - 28px);overflow:auto;
+padding:20px;border:1px solid #c99c56;border-radius:15px;
 background:linear-gradient(145deg,#51281d,#21100d);
-box-shadow:0 15px 45px #000b}
-.dialog h2{color:#f4d38a;font-size:clamp(25px,5vw,42px);margin:8px 0 16px}
-.dialog label{display:flex;align-items:center;justify-content:space-between;
-gap:10px;margin:15px 0;text-align:left}
+box-shadow:0 15px 45px #000b;text-align:center}
+.dialog h2{color:#f4d38a;font-size:clamp(22px,4vw,32px);margin:4px 0 15px}
+.dialog p{font-size:14px;line-height:1.55}
+.dialog label{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0;text-align:left;font-size:14px}
 .dialog input[type=range]{width:48%;accent-color:#d9ac61}
 .dialog input[type=checkbox]{width:19px;height:19px;accent-color:#bd8b44}
-.dialog select{max-width:130px;background:#2b1710;color:#fff0ce;
-border:1px solid #a17a47;border-radius:6px;padding:7px}
+.dialog select{max-width:140px;background:#2b1710;color:#fff0ce;border:1px solid #a17a47;border-radius:6px;padding:7px}
+#resultOverlay{background:#130806eF}
+#resultOverlay .dialog{width:min(100%,450px)}
+#resultTitle{font-size:clamp(27px,6vw,44px)}
+@media(max-height:700px){
+ .page{padding:4px}.panel{padding:6px}
+ .hero{height:calc(100svh - 8px);min-height:450px}
+ .board-wrap{width:min(100%,calc((100svh - 160px)*.895),540px)}
+ .status{padding:2px}.tools{margin:4px auto 1px;gap:4px}
+ .tool{padding:6px 2px;font-size:12px}
+ .note{display:none}
+}
 @media(max-width:600px){
- .page{padding:7px}.panel{padding:9px}.hero{min-height:540px;padding:14px}
- .hero-content{margin-top:-60px}.subtitle{font-size:14px}
- .decor-board{width:91%;height:270px;bottom:16px}
- .tools{grid-template-columns:repeat(2,minmax(0,1fr))}
- .tool{padding:12px 4px;font-size:14px}
- .btn{font-size:14px;padding:12px 6px}
- .gamebar{justify-content:center}
+ .page{padding:4px}.panel{padding:7px}
+ .hero{height:calc(100svh - 8px);min-height:480px}
+ .hero-content{margin-top:-12%}
+ .subtitle{font-size:13px}
+ .decor-board{width:92%;height:34%}
+ .board-wrap{width:min(100%,calc((100svh - 200px)*.895))}
+ .gamebar{gap:4px}.pill{font-size:11px;padding:6px}
+ .btn.small{font-size:12px;padding:7px}
+ .tool{font-size:11px;padding:9px 1px}
+ .dialog{padding:16px}
 }
 </style>
 </head>
 <body>
 <div class="page">
-
 <section id="home" class="panel">
  <div class="hero">
   <div class="decor-board"></div>
   <div class="hero-content">
    <div class="lanterns">🏮　♟　🏮</div>
-   <h1>CỜ TƯỚNG</h1>
-   <div class="subtitle">Khai cuộc • Đối trí • Phá thế cờ</div>
+   <h1 id="mainTitle">CỜ TƯỚNG</h1>
+   <div class="subtitle" id="mainSubtitle">Khai cuộc • Đối trí • Phá thế cờ</div>
    <div class="modes">
     <button class="btn gold" onclick="showDifficulty()">⚔ Đấu với máy</button>
     <button class="btn" onclick="startGame('human')">♟ Đấu hai người</button>
@@ -135,16 +132,6 @@ border:1px solid #a17a47;border-radius:6px;padding:7px}
     <button class="btn dark" onclick="openDialog('settingsDialog')">⚙ Cài đặt</button>
    </div>
   </div>
- </div>
- <div id="difficulty" class="hidden">
-  <h2 class="screen-title">CHỌN CẤP ĐỘ</h2>
-  <div class="modes">
-   <button class="btn" onclick="startGame('easy')">🌱 Dễ</button>
-   <button class="btn" onclick="startGame('medium')">🗡 Trung bình</button>
-   <button class="btn" onclick="startGame('hard')">🔥 Khó</button>
-   <button class="btn gold" onclick="startGame('expert')">👑 Siêu khó</button>
-  </div>
-  <div class="backline"><button class="btn dark" onclick="hideDifficulty()">← Quay lại</button></div>
  </div>
 </section>
 
@@ -159,11 +146,11 @@ border:1px solid #a17a47;border-radius:6px;padding:7px}
   <canvas id="board" width="680" height="760"></canvas>
   <div id="resultOverlay" class="overlay hidden">
    <div class="dialog">
-    <div style="font-size:42px">🏆</div>
+    <div style="font-size:40px">🏆</div>
     <h2 id="resultTitle">CHIẾN THẮNG!</h2>
     <p id="resultText">Ván đấu đã kết thúc.</p>
     <button class="btn gold" onclick="newGame()">↻ Chơi lại</button>
-    <button class="btn dark" onclick="goHome()" style="margin-top:8px">⌂ Trang chủ</button>
+    <button class="btn dark" style="margin-top:8px" onclick="goHome()">⌂ Trang chủ</button>
    </div>
   </div>
  </div>
@@ -173,10 +160,23 @@ border:1px solid #a17a47;border-radius:6px;padding:7px}
   <button class="tool" onclick="newGame()">⟳ Ván mới</button>
   <button class="tool" onclick="resign()">🏳 Đầu hàng</button>
  </div>
- <p class="note">Chọn quân của mình, sau đó chọn ô muốn đi.</p>
+ <p class="note">Chọn quân của mình rồi chọn ô muốn đi.</p>
 </section>
+</div>
 
-<!-- Cửa sổ nổi, đè lên màn hình hiện tại -->
+<!-- Các cửa sổ nổi nằm ngoài phần nội dung chính để luôn phủ lên toàn màn hình -->
+<div id="difficultyDialog" class="overlay hidden">
+ <div class="dialog">
+  <div style="font-size:32px">♟</div>
+  <h2>CHỌN CHẾ ĐỘ ĐẤU MÁY</h2>
+  <button class="btn" onclick="startGame('easy')">🌱 Dễ</button>
+  <button class="btn" style="margin-top:7px" onclick="startGame('medium')">🗡 Trung bình</button>
+  <button class="btn" style="margin-top:7px" onclick="startGame('hard')">🔥 Khó</button>
+  <button class="btn gold" style="margin-top:7px" onclick="startGame('expert')">👑 Siêu khó</button>
+  <button class="btn dark" style="margin-top:12px" onclick="closeDialog('difficultyDialog')">← Quay lại</button>
+ </div>
+</div>
+
 <div id="settingsDialog" class="overlay hidden">
  <div class="dialog">
   <h2>CÀI ĐẶT</h2>
@@ -196,16 +196,15 @@ border:1px solid #a17a47;border-radius:6px;padding:7px}
 <div id="rulesDialog" class="overlay hidden">
  <div class="dialog">
   <h2>LUẬT CHƠI CƠ BẢN</h2>
-  <p>Xe đi ngang hoặc dọc, không được nhảy qua quân khác.</p>
-  <p>Mã đi hình chữ L, nhưng bị cản nếu có quân ở chân Mã.</p>
-  <p>Pháo đi như Xe; khi ăn quân phải nhảy qua đúng một quân.</p>
-  <p>Tướng và Sĩ đi trong cung. Tượng đi chéo hai ô và không qua sông.</p>
-  <p>Tốt đi thẳng; qua sông có thể đi ngang.</p>
+  <p><b>Xe:</b> đi ngang hoặc dọc, không nhảy qua quân khác.</p>
+  <p><b>Mã:</b> đi hình chữ L, bị cản nếu có quân ở chân Mã.</p>
+  <p><b>Pháo:</b> đi như Xe; khi ăn quân phải nhảy qua đúng một quân.</p>
+  <p><b>Tướng và Sĩ:</b> đi trong cung. <b>Tượng:</b> đi chéo hai ô và không qua sông.</p>
+  <p><b>Tốt:</b> đi thẳng; sau khi qua sông có thể đi ngang.</p>
   <button class="btn gold" onclick="closeDialog('rulesDialog')">Đã hiểu</button>
  </div>
 </div>
 
-</div>
 <script>
 const canvas=document.getElementById('board');
 const ctx=canvas.getContext('2d');
@@ -216,7 +215,7 @@ const vals={K:10000,k:10000,R:900,r:900,C:450,c:450,
  H:400,h:400,E:200,e:200,A:200,a:200,P:100,p:100};
 let board,turn,selected,moves,history,mode='human',ended=false;
 let soundOn=true,volume=.35,musicOn=false,audio=null,musicTimer=null;
-let hintMove=null,lang='vi';
+let hintMove=null;
 
 function initialBoard(){
  let b=Array.from({length:10},()=>Array(9).fill(null));
@@ -232,18 +231,26 @@ const side=p=>p===p.toUpperCase()?'r':'b';
 const inside=(y,x)=>y>=0&&y<10&&x>=0&&x<9;
 function palace(y,x,s){return x>=3&&x<=5&&(s==='r'?y>=7&&y<=9:y>=0&&y<=2)}
 function crossed(y,s){return s==='r'?y<=4:y>=5}
-function addMove(b,out,s,y,x){if(inside(y,x)&&(!b[y][x]||side(b[y][x])!==s))out.push([y,x])}
+function addMove(b,out,s,y,x){
+ if(inside(y,x)&&(!b[y][x]||side(b[y][x])!==s))out.push([y,x]);
+}
 function pseudo(b,y,x){
  const p=b[y][x];if(!p)return [];
  const s=side(p),t=p.toUpperCase(),out=[];
  if(t==='K'||t==='A'){
   const ds=t==='K'?[[1,0],[-1,0],[0,1],[0,-1]]:[[1,1],[1,-1],[-1,1],[-1,-1]];
-  for(const [dy,dx] of ds){const ny=y+dy,nx=x+dx;if(palace(ny,nx,s))addMove(b,out,s,ny,nx)}
+  for(const [dy,dx] of ds){
+   const ny=y+dy,nx=x+dx;
+   if(palace(ny,nx,s))addMove(b,out,s,ny,nx);
+  }
   if(t==='K'){
    for(const d of [-1,1]){
     let ny=y+d;
     while(inside(ny,x)){
-     if(b[ny][x]){if(b[ny][x].toUpperCase()==='K'&&side(b[ny][x])!==s)out.push([ny,x]);break}
+     if(b[ny][x]){
+      if(b[ny][x].toUpperCase()==='K'&&side(b[ny][x])!==s)out.push([ny,x]);
+      break;
+     }
      ny+=d;
     }
    }
@@ -261,15 +268,17 @@ function pseudo(b,y,x){
    if(inside(ny,nx)&&!b[y+by][x+bx])addMove(b,out,s,ny,nx);
   }
  }else if(t==='R'||t==='C'){
-  // Xe: đi đến ô trống hoặc ăn quân đối phương đầu tiên trên mỗi hướng.
-  // Pháo: đi qua ô trống; ăn quân sau khi nhảy qua đúng một quân.
+  // Xe và Pháo được xử lý riêng để không làm sai luật ăn quân.
   for(const [dy,dx] of [[1,0],[-1,0],[0,1],[0,-1]]){
    let ny=y+dy,nx=x+dx,screen=false;
    while(inside(ny,nx)){
     const target=b[ny][nx];
     if(t==='R'){
      if(!target)addMove(b,out,s,ny,nx);
-     else{if(side(target)!==s)addMove(b,out,s,ny,nx);break}
+     else{
+      if(side(target)!==s)addMove(b,out,s,ny,nx);
+      break;
+     }
     }else{
      if(!screen){
       if(!target)addMove(b,out,s,ny,nx);
@@ -285,7 +294,10 @@ function pseudo(b,y,x){
  }else if(t==='P'){
   const dy=s==='r'?-1:1;
   addMove(b,out,s,y+dy,x);
-  if(crossed(y,s)){addMove(b,out,s,y,x-1);addMove(b,out,s,y,x+1)}
+  if(crossed(y,s)){
+   addMove(b,out,s,y,x-1);
+   addMove(b,out,s,y,x+1);
+  }
  }
  return out;
 }
@@ -309,24 +321,26 @@ function legal(b,y,x){
  if(!b[y][x])return [];
  const s=side(b[y][x]);
  return pseudo(b,y,x).filter(([ny,nx])=>{
-  const nb=clone(b);nb[ny][nx]=nb[y][x];nb[y][x]=null;
+  const nb=clone(b);
+  nb[ny][nx]=nb[y][x];nb[y][x]=null;
   return !inCheck(nb,s);
  });
 }
 function allMoves(b,s){
  const out=[];
- for(let y=0;y<10;y++)for(let x=0;x<9;x++)
-  if(b[y][x]&&side(b[y][x])===s)
+ for(let y=0;y<10;y++)for(let x=0;x<9;x++){
+  if(b[y][x]&&side(b[y][x])===s){
    for(const [ny,nx] of legal(b,y,x))out.push({y,x,ny,nx});
+  }
+ }
  return out;
 }
 function drawBoard(){
  ctx.clearRect(0,0,680,760);
  ctx.fillStyle='#70401f';ctx.fillRect(10,10,660,740);
- ctx.fillStyle='#d9b476';ctx.fillRect(19,19,642,722);
  const grad=ctx.createLinearGradient(0,20,0,740);
  grad.addColorStop(0,'#e6c98b');grad.addColorStop(1,'#c99b59');
- ctx.fillStyle=grad;ctx.fillRect(22,22,636,716);
+ ctx.fillStyle=grad;ctx.fillRect(19,19,642,722);
  ctx.strokeStyle='#563019';ctx.lineWidth=2;
  for(let x=0;x<9;x++){
   ctx.beginPath();ctx.moveTo(L+x*DX,T);ctx.lineTo(L+x*DX,T+9*DY);ctx.stroke();
@@ -334,15 +348,16 @@ function drawBoard(){
  for(let y=0;y<10;y++){
   ctx.beginPath();ctx.moveTo(L,T+y*DY);ctx.lineTo(L+8*DX,T+y*DY);ctx.stroke();
  }
- // Hai đường chéo trong cung Tướng.
  for(const y of [0,7]){
   ctx.beginPath();ctx.moveTo(L+3*DX,T+y*DY);ctx.lineTo(L+5*DX,T+(y+2)*DY);ctx.stroke();
   ctx.beginPath();ctx.moveTo(L+5*DX,T+y*DY);ctx.lineTo(L+3*DX,T+(y+2)*DY);ctx.stroke();
  }
  ctx.fillStyle='#63331b';ctx.font='bold 23px serif';ctx.textAlign='center';
- ctx.fillText('楚 河',L+2*DX,T+4.65*DY);ctx.fillText('漢 界',L+6*DX,T+4.65*DY);
+ ctx.fillText('楚 河',L+2*DX,T+4.65*DY);
+ ctx.fillText('漢 界',L+6*DX,T+4.65*DY);
  if(selected){
-  ctx.fillStyle='#36884c55';ctx.fillRect(L+selected[1]*DX-22,T+selected[0]*DY-22,44,44);
+  ctx.fillStyle='#36884c55';
+  ctx.fillRect(L+selected[1]*DX-22,T+selected[0]*DY-22,44,44);
   for(const [y,x] of moves){
    ctx.beginPath();ctx.arc(L+x*DX,T+y*DY,7,0,Math.PI*2);
    ctx.fillStyle='#237b43';ctx.fill();
@@ -381,20 +396,18 @@ function beep(freq=430,dur=.09){
  }catch(e){}
 }
 function updateStatus(){
- document.getElementById('status').textContent=
- turn==='r'?'Lượt Đỏ':'Lượt Đen';
+ document.getElementById('status').textContent=turn==='r'?'Lượt Đỏ':'Lượt Đen';
 }
 function playMove(y,x,ny,nx){
  history.push({board:clone(board),turn});
  const captured=board[ny][nx];
  board[ny][nx]=board[y][x];board[y][x]=null;
- selected=null;moves=[];hintMove=null;turn=turn==='r'?'b':'r';
- beep(captured?650:420);
+ selected=null;moves=[];hintMove=null;
+ turn=turn==='r'?'b':'r';beep(captured?650:420);
  drawBoard();updateStatus();
- const next=allMoves(board,turn);
- if(next.length===0){
-  finish(turn==='r'?'b':'r');return;
- }
+ if(!kingPos(board,'r')){finish('b');return}
+ if(!kingPos(board,'b')){finish('r');return}
+ if(allMoves(board,turn).length===0){finish(turn==='r'?'b':'r');return}
  if(mode!=='human'&&turn==='b'&&!ended)setTimeout(botMove,300);
 }
 function boardClick(e){
@@ -419,8 +432,7 @@ function botMove(){
  if(!ms.length){finish('r');return}
  let best=ms[0],bestScore=-Infinity;
  for(const m of ms){
-  const captured=board[m.ny][m.nx];
-  let score=(vals[captured]||0)*1.4+Math.random()*20;
+  let score=(vals[board[m.ny][m.nx]]||0)*1.4+Math.random()*20;
   const nb=clone(board);nb[m.ny][m.nx]=nb[m.y][m.x];nb[m.y][m.x]=null;
   if(inCheck(nb,'r'))score+=mode==='expert'?120:mode==='hard'?70:30;
   if(mode==='easy')score=Math.random()*100;
@@ -445,8 +457,8 @@ function newGame(){
 }
 function startGame(m){
  mode=m;
+ closeDialog('difficultyDialog');
  document.getElementById('home').classList.add('hidden');
- document.getElementById('difficulty').classList.add('hidden');
  document.getElementById('game').classList.remove('hidden');
  const labels={human:'ĐẤU HAI NGƯỜI',easy:'ĐẤU MÁY • DỄ',
  medium:'ĐẤU MÁY • TRUNG BÌNH',hard:'ĐẤU MÁY • KHÓ',expert:'ĐẤU MÁY • SIÊU KHÓ'};
@@ -458,8 +470,7 @@ function goHome(){
  document.getElementById('home').classList.remove('hidden');
  document.getElementById('resultOverlay').classList.add('hidden');
 }
-function showDifficulty(){document.getElementById('difficulty').classList.remove('hidden')}
-function hideDifficulty(){document.getElementById('difficulty').classList.add('hidden')}
+function showDifficulty(){openDialog('difficultyDialog')}
 function openDialog(id){document.getElementById(id).classList.remove('hidden')}
 function closeDialog(id){document.getElementById(id).classList.add('hidden')}
 function undoMove(){
@@ -475,7 +486,7 @@ function hint(){
  const ms=allMoves(board,turn);if(!ms.length)return;
  let best=ms[0],score=-Infinity;
  for(const m of ms){
-  let v=(vals[board[m.ny][m.nx]]||0)+Math.random()*10;
+  const v=(vals[board[m.ny][m.nx]]||0)+Math.random()*10;
   if(v>score){score=v;best=m}
  }
  hintMove=best;drawBoard();
@@ -500,14 +511,9 @@ function toggleMusic(on){
  }catch(e){}
 }
 function changeLanguage(v){
- lang=v;
- if(v==='en'){
-  document.querySelector('h1').textContent='XIANGQI';
-  document.querySelector('.subtitle').textContent='Strategy • Focus • Challenge';
- }else{
-  document.querySelector('h1').textContent='CỜ TƯỚNG';
-  document.querySelector('.subtitle').textContent='Khai cuộc • Đối trí • Phá thế cờ';
- }
+ document.getElementById('mainTitle').textContent=v==='en'?'XIANGQI':'CỜ TƯỚNG';
+ document.getElementById('mainSubtitle').textContent=v==='en'?
+ 'Strategy • Focus • Challenge':'Khai cuộc • Đối trí • Phá thế cờ';
 }
 board=initialBoard();drawBoard();
 </script>
@@ -515,5 +521,5 @@ board=initialBoard();drawBoard();
 </html>
 """
 
-components.html(HTML, height=1900, scrolling=True)
-
+# Chiều cao iframe được giảm để hạn chế cuộn trang bên ngoài Streamlit.
+components.html(HTML, height=1000, scrolling=False)

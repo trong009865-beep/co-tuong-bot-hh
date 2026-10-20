@@ -153,7 +153,6 @@ canvas{display:block;width:100%;height:auto}
    <h2>Thông tin ván đấu</h2>
    <div class="status" id="status">Đến lượt Đỏ. Chọn một quân cờ.</div>
    <div class="side-buttons">
-    <button onclick="hintMove()">💡 Gợi ý nước đi</button>
     <button onclick="newGame()">⟳ Ván mới</button>
     <button class="danger" onclick="resign()">Đầu hàng</button>
     <button class="wide" onclick="goHome()">⌂ Về sảnh chính</button>
@@ -202,7 +201,7 @@ canvas{display:block;width:100%;height:auto}
    <li><b>Tốt:</b> đi thẳng một ô; qua sông được đi ngang, không đi lùi.</li>
   </ul>
   <p><b>3. Cách thao tác:</b> Nhấp quân của mình rồi nhấp ô muốn đi.</p>
-  <p><b>4. Công cụ:</b> Gợi ý đánh dấu nước tham khảo; Ván mới khởi động lại; Đầu hàng kết thúc ván.</p>
+  <p><b>4. Công cụ:</b> Ván mới khởi động lại; Đầu hàng kết thúc ván.</p>
   <div class="modal-buttons"><button onclick="closeModal('helpModal')">Đã hiểu</button></div>
  </div>
 </div>
@@ -354,7 +353,7 @@ const initial=[
  ["R","H","E","A","K","A","E","H","R"]
 ];
 let board=[],turn="R",selected=null,legal=[],history=[],lastMove=null;
-let mode="human",level=1,ended=false,botBusy=false,hint=null,pieceAnimation=null;
+let mode="human",level=1,ended=false,botBusy=false,pieceAnimation=null;
 const ANIMATION_DURATION=400;
 const redPieces={K:"帥",A:"仕",E:"相",R:"俥",H:"傌",C:"炮",S:"兵"};
 const blackPieces={k:"將",a:"士",e:"象",r:"車",h:"馬",c:"砲",s:"卒"};
@@ -430,7 +429,7 @@ function cloneBoard(){return board.map(row=>row.slice())}
 function updateStatus(){if(!ended&&!botBusy)$("status").textContent=turn==="R"?"Đến lượt Đỏ. Chọn một quân cờ.":"Đến lượt Đen. Chọn một quân cờ."}
 function newGame(){
  pieceAnimation=null;board=initial.map(row=>row.slice());
- turn="R";selected=null;legal=[];history=[];lastMove=null;ended=false;botBusy=false;hint=null;
+ turn="R";selected=null;legal=[];history=[];lastMove=null;ended=false;botBusy=false;
  $("result").classList.remove("show");updateStatus();drawBoard();beep(330,.1);
 }
 function startGame(m,l){
@@ -457,7 +456,7 @@ function makeMove(m){
  const movingPiece=board[m.r][m.c],captured=board[m.nr][m.nc];
  history.push({board:cloneBoard(),turn,lastMove:lastMove?{...lastMove}:null});
  board[m.nr][m.nc]=movingPiece;board[m.r][m.c]=null;
- lastMove={r:m.r,c:m.c,nr:m.nr,nc:m.nc};selected=null;legal=[];hint=null;
+ lastMove={r:m.r,c:m.c,nr:m.nr,nc:m.nc};selected=null;legal=[];
  animatePieceMove(m,movingPiece);beep(captured?680:430,.08,captured?"triangle":"sine");
  turn=turn==="R"?"B":"R";
  if(!findGeneral(turn)){finish(turn==="R"?"B":"R");return}
@@ -471,13 +470,6 @@ function finish(winner){
  $("resultText").textContent="";$("result").classList.add("show");drawBoard();beep(740,.25,"triangle");
 }
 function resign(){if(ended)return;if(!confirm("Bạn có chắc muốn đầu hàng không?"))return;finish(turn==="R"?"B":"R")}
-function hintMove(){
- if(ended||botBusy||pieceAnimation)return;
- const moves=allMoves(turn);if(!moves.length)return;
- let best=moves[0],bestScore=-9999;const value={k:10000,r:9,c:5,h:4,e:2,a:2,s:1};
- moves.forEach(m=>{let score=Math.random()*2;const target=board[m.nr][m.nc];if(target)score+=(value[target.toLowerCase()]||0);if(target&&target.toLowerCase()==="k")score+=10000;if(score>bestScore){bestScore=score;best=m}});
- hint=best;drawBoard();$("status").textContent="Gợi ý: nước đi được viền vàng.";beep(580,.1);
-}
 function botMove(){
  if(ended||turn!=="B"||mode!=="bot"){botBusy=false;return}
  const moves=allMoves("B");if(!moves.length){finish("R");return}
@@ -504,7 +496,7 @@ function clickBoard(e){
  const p=board[r][c];
  if(selected&&legal.some(([nr,nc])=>nr===r&&nc===c)){makeMove({r:selected[0],c:selected[1],nr:r,nc:c});return}
  if(p&&side(p)===turn){
-  selected=[r,c];legal=legalMoves(r,c);hint=null;beep(510,.06);
+  selected=[r,c];legal=legalMoves(r,c);beep(510,.06);
   if(mode==="bot"&&(level===1||level===2)&&turn==="R"){
    const captures=legal.filter(([nr,nc])=>board[nr][nc]!==null);
    $("status").textContent=captures.length?"Gợi ý ăn quân: các ô được đánh dấu vàng.":"Chọn ô muốn đi.";
@@ -551,7 +543,6 @@ function drawBoard(captureMoves=null,now){
  const ctx=canvas.getContext("2d");drawBoardCanvas(canvas,false);
  const pad=30,dx=60,dy=60;
  if(lastMove){ctx.fillStyle="rgba(55,140,65,.35)";[[lastMove.r,lastMove.c],[lastMove.nr,lastMove.nc]].forEach(([r,c])=>ctx.fillRect(pad+c*dx-13,pad+r*dy-13,26,26))}
- if(hint){ctx.strokeStyle="#e5a829";ctx.lineWidth=4;[[hint.r,hint.c],[hint.nr,hint.nc]].forEach(([r,c])=>{ctx.beginPath();ctx.arc(pad+c*dx,pad+r*dy,20,0,Math.PI*2);ctx.stroke()})}
  legal.forEach(([r,c])=>{
   ctx.beginPath();ctx.arc(pad+c*dx,pad+r*dy,7,0,Math.PI*2);
   ctx.fillStyle=board[r][c]?"rgba(180,35,30,.75)":"rgba(45,110,52,.7)";ctx.fill();
@@ -588,3 +579,4 @@ init();
 """
 
 components.html(HTML, height=1050, scrolling=False)
+

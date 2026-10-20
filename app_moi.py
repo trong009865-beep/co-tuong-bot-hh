@@ -471,21 +471,91 @@ function finish(winner){
 }
 function resign(){if(ended)return;if(!confirm("Bạn có chắc muốn đầu hàng không?"))return;finish(turn==="R"?"B":"R")}
 function botMove(){
- if(ended||turn!=="B"||mode!=="bot"){botBusy=false;return}
- const moves=allMoves("B");if(!moves.length){finish("R");return}
- const value={k:10000,r:900,c:450,h:400,e:200,a:200,s:100};
- function scoreMove(m){
-  const target=board[m.nr][m.nc];let score=Math.random()*20;if(target)score+=(value[target.toLowerCase()]||0)*1.5;
-  const p=board[m.r][m.c];board[m.nr][m.nc]=p;board[m.r][m.c]=null;
-  if(inCheck("B"))score-=1000;if(inCheck("R"))score+=80;
-  board[m.r][m.c]=p;board[m.nr][m.nc]=target;
-  if(level===1)score=Math.random()*100+(target?50:0);
-  if(level===2)score+=Math.random()*35;if(level===3)score+=Math.random()*12;if(level===4)score+=Math.random()*3;
-  return score;
- }
- moves.sort((a,b)=>scoreMove(b)-scoreMove(a));
- let chosen=moves[0];if(level===1&&Math.random()<.55)chosen=moves[Math.floor(Math.random()*moves.length)];
- botBusy=false;makeMove(chosen);
+  if(ended||turn!=="B"||mode!=="bot"){botBusy=false;return}
+  const moves=allMoves("B");
+  if(!moves.length){finish("R");return}
+
+  // Giá trị tương đối của các quân cờ.
+  const value={k:10000,r:900,c:480,h:430,e:220,a:220,s:120};
+
+  // Kiểm tra một quân có được quân cùng phe bảo vệ hay không.
+  function isDefended(r,c,by){
+    const target=board[r][c];
+    board[r][c]=null;
+    let defended=false;
+    for(let y=0;y<10&&!defended;y++){
+      for(let x=0;x<9&&!defended;x++){
+        if(board[y][x]&&side(board[y][x])===by&&
+           pseudoMoves(y,x).some(([nr,nc])=>nr===r&&nc===c)){
+          defended=true;
+        }
+      }
+    }
+    board[r][c]=target;
+    return defended;
+  }
+
+  // Chấm điểm an toàn của toàn bộ bàn cờ:
+  // phạt quân Đen bị treo, thưởng khi quân Đỏ bị đe dọa.
+  function safetyScore(){
+    let score=0;
+    for(let r=0;r<10;r++)for(let c=0;c<9;c++){
+      const p=board[r][c];
+      if(!p)continue;
+      const s=side(p),v=value[p.toLowerCase()]||100;
+      const enemy=s==="B"?"R":"B";
+      if(isAttacked(r,c,enemy)){
+        const defended=isDefended(r,c,s);
+        if(s==="B"){
+          score-=v*(defended?0.22:0.78);
+        }else{
+          score+=v*(defended?0.16:0.62);
+        }
+      }
+    }
+    return score;
+  }
+
+  const safetyBefore=safetyScore();
+  function scoreMove(m){
+    const moving=board[m.r][m.c];
+    const target=board[m.nr][m.nc];
+    let score=target?(value[target.toLowerCase()]||0)*1.25:0;
+
+    // Thử nước đi trên bàn cờ, rồi đánh giá an toàn của mọi quân.
+    board[m.nr][m.nc]=moving;
+    board[m.r][m.c]=null;
+
+    if(inCheck("B"))score-=12000;
+    if(inCheck("R"))score+=140;
+
+    const safetyAfter=safetyScore();
+    score+=safetyAfter-safetyBefore;
+
+    // Ưu tiên chiếm trung tâm và đưa quân ra hoạt động ở mức nhẹ.
+    const centerBonus=(4-Math.abs(4-m.nc))*2;
+    if(moving.toLowerCase()==="r"||moving.toLowerCase()==="c"||moving.toLowerCase()==="h"){
+      score+=centerBonus;
+    }
+
+    board[m.r][m.c]=moving;
+    board[m.nr][m.nc]=target;
+
+    // Mức dễ vẫn có yếu tố ngẫu nhiên; mức cao tính toán ổn định hơn.
+    if(level===1)score+=Math.random()*100;
+    else if(level===2)score+=Math.random()*35;
+    else if(level===3)score+=Math.random()*12;
+    else score+=Math.random()*3;
+    return score;
+  }
+
+  moves.sort((a,b)=>scoreMove(b)-scoreMove(a));
+  let chosen=moves[0];
+  if(level===1&&Math.random()<.35){
+    chosen=moves[Math.floor(Math.random()*Math.min(moves.length,Math.max(2,Math.ceil(moves.length*.35))))];
+  }
+  botBusy=false;
+  makeMove(chosen);
 }
 function clickBoard(e){
  if(ended||botBusy||pieceAnimation||(mode==="bot"&&turn==="B"))return;

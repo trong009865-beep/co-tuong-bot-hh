@@ -1,4 +1,3 @@
-
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -155,7 +154,6 @@ canvas{display:block;width:100%;height:auto}
    <div class="status" id="status">Đến lượt Đỏ. Chọn một quân cờ.</div>
    <div class="side-buttons">
     <button onclick="hintMove()">💡 Gợi ý nước đi</button>
-    <button onclick="undoMove()">↶ Đi lại</button>
     <button onclick="newGame()">⟳ Ván mới</button>
     <button class="danger" onclick="resign()">Đầu hàng</button>
     <button class="wide" onclick="goHome()">⌂ Về sảnh chính</button>
@@ -204,7 +202,7 @@ canvas{display:block;width:100%;height:auto}
    <li><b>Tốt:</b> đi thẳng một ô; qua sông được đi ngang, không đi lùi.</li>
   </ul>
   <p><b>3. Cách thao tác:</b> Nhấp quân của mình rồi nhấp ô muốn đi.</p>
-  <p><b>4. Công cụ:</b> Gợi ý đánh dấu nước tham khảo; Đi lại hoàn tác nước trước; Ván mới khởi động lại; Đầu hàng kết thúc ván.</p>
+  <p><b>4. Công cụ:</b> Gợi ý đánh dấu nước tham khảo; Ván mới khởi động lại; Đầu hàng kết thúc ván.</p>
   <div class="modal-buttons"><button onclick="closeModal('helpModal')">Đã hiểu</button></div>
  </div>
 </div>
@@ -452,7 +450,7 @@ function animatePieceMove(m,piece){
 function animationFrame(now){
  if(!pieceAnimation)return;
  if(now-pieceAnimation.start>=ANIMATION_DURATION){pieceAnimation=null;drawBoard();return}
- drawBoard(null,now);requestAnimationFrame(animationFrame);
+ drawBoard(now);requestAnimationFrame(animationFrame);
 }
 function makeMove(m){
  if(ended)return;
@@ -473,13 +471,6 @@ function finish(winner){
  $("resultText").textContent="";$("result").classList.add("show");drawBoard();beep(740,.25,"triangle");
 }
 function resign(){if(ended)return;if(!confirm("Bạn có chắc muốn đầu hàng không?"))return;finish(turn==="R"?"B":"R")}
-function undoMove(){
- if(!history.length||ended)return;
- let steps=(mode==="bot"&&turn==="R"&&history.length>=2)?2:1;
- while(steps--&&history.length){const prev=history.pop();board=prev.board;turn=prev.turn;lastMove=prev.lastMove}
- pieceAnimation=null;selected=null;legal=[];hint=null;botBusy=false;ended=false;
- $("result").classList.remove("show");updateStatus();drawBoard();beep(300,.08);
-}
 function hintMove(){
  if(ended||botBusy||pieceAnimation)return;
  const moves=allMoves(turn);if(!moves.length)return;
